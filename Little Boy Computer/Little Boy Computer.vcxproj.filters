@@ -36,6 +36,9 @@
     <ClCompile Include="Cart.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="IO.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CPU.h">
@@ -54,6 +57,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Cart.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IO.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

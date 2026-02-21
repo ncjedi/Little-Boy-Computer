@@ -3,11 +3,12 @@
 #include "GPU.h"
 #include "VRAM.h"
 #include "Cart.h"
+#include "IO.h"
 
 uint16_t RAMoffset = 0x0000;
 uint16_t back_ramOffset = 0x0401;
 uint16_t front_ramOffset = 0x0601;
-
+uint16_t IO_offset = 0x0801;
 uint16_t prog_romOffset = 0x1001;
 uint16_t graphic_romOffset = 0x8000;
 
@@ -27,7 +28,7 @@ uint8_t getValue(uint16_t address)
 	}
 	else if (address <= 0x1000)
 	{
-		/*read from I/O*/
+		return IO_address[address - IO_offset]; /*IO addresses*/
 	}
 	else if (address <= 0x7FFF)
 	{
@@ -56,16 +57,14 @@ void setValue(uint16_t address, uint8_t value)
 	}
 	else if (address <= 0x1000)
 	{
-		/*write to I/O*/
+		IO_address[address - IO_offset] = value; /*IO addresses*/
 	}
-
-	//these would be for writing to rom but it's rom so no.
 	else if (address <= 0x7FFF)
 	{
-		/*read from program rom*/
+		prog_rom[address - prog_romOffset] = value; /*read from program rom*/
 	}
 	else
 	{
-		/*read from graphic rom*/
+		graphic_rom[address - graphic_romOffset] = value; /*read from graphic rom*/
 	}
 }

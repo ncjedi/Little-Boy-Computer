@@ -133,6 +133,7 @@
     <ClCompile Include="Cart.c" />
     <ClCompile Include="CPU.c" />
     <ClCompile Include="GPU.c" />
+    <ClCompile Include="IO.c" />
     <ClCompile Include="power.c" />
     <ClCompile Include="RAM.c" />
     <ClCompile Include="VRAM.c" />
@@ -142,6 +143,7 @@
     <ClInclude Include="Cart.h" />
     <ClInclude Include="CPU.h" />
     <ClInclude Include="GPU.h" />
+    <ClInclude Include="IO.h" />
     <ClInclude Include="RAM.h" />
     <ClInclude Include="VRAM.h" />
   </ItemGroup>
