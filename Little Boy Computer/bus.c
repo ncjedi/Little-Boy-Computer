@@ -58,14 +58,12 @@ void setValue(uint16_t address, uint8_t value)
 	{
 		/*write to I/O*/
 	}
-
-	//these would be for writing to rom but it's rom so no.
 	else if (address <= 0x7FFF)
 	{
-		/*read from program rom*/
+		prog_rom[address - prog_romOffset] = value; /*read from program rom*/
 	}
 	else
 	{
-		/*read from graphic rom*/
+		graphic_rom[address - graphic_romOffset] = value; /*read from graphic rom*/
 	}
 }
