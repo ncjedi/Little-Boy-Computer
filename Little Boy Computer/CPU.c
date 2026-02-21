@@ -5,6 +5,7 @@
 #include "CPU.h"
 #include "bus.h"
 #include "GPU.h"
+#include "IO.h"
 
 uint8_t reg_x = 0x00;
 uint8_t reg_y = 0x00;
@@ -424,11 +425,11 @@ void CPU_clock()
 		if (elapsed_time >= 0.000001)
 		{
 			start_time = clock();
-			GPUtick();
 
 			if (!wait)
 			{
 				run_opcode();
+				GPUtick();
 
 				if (cpu_stage)
 				{
@@ -438,8 +439,6 @@ void CPU_clock()
 				{
 					cpu_stage = 1;
 				}
-
-				printf("%d ", program_counter);
 			}
 			else
 			{

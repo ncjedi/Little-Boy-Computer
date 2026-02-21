@@ -1,9 +1,0 @@
-0x0000 - 0x0400 - RAM
-0x0401 - 0x0800 - VRAM
-0x0801 - 0x1000 - I/O
-0x1001 - 0x7FFF - Cart Program Data
-0x8000 - 0xFFFF - Cart Sprite Data
-
-0x0799 and 0x0800 are used for the scrolling offset for background tiles.
-
-0x0401 through 0x0481 are where the positions of sprites for the background are kept. 

@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "bus.h"
 #include "Cart.h"
+#include "IO.h"
 
 GLFWwindow* window;
 
@@ -116,6 +117,819 @@ void GetKeys()
     if (glfwGetKey(window, GLFW_KEY_F1))
     {
         readCart();
+    }
+
+    //keyboard keys
+    if (glfwGetKey(window, GLFW_KEY_1))
+    {
+        IO_address[0] |= 0b10000000;
+    }
+    else if(IO_address[0] & 0b10000000)
+    {
+        IO_address[0] &= 0b01111111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_2))
+    {
+        IO_address[0] |= 0b01000000;
+    }
+    else if(IO_address[0] & 0b01000000)
+    {
+        IO_address[0] &= 0b10111111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_3))
+    {
+        IO_address[0] |= 0b00100000;
+    }
+    else if (IO_address[0] & 0b00100000)
+    {
+        IO_address[0] &= 0b11011111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_4))
+    {
+        IO_address[0] |= 0b00010000;
+    }
+    else if (IO_address[0] & 0b00010000)
+    {
+        IO_address[0] &= 0b11101111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_5))
+    {
+        IO_address[0] |= 0b00001000;
+    }
+    else if (IO_address[0] & 0b00001000)
+    {
+        IO_address[0] &= 0b11110111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_6))
+    {
+        IO_address[0] |= 0b00000100;
+    }
+    else if (IO_address[0] & 0b00000100)
+    {
+        IO_address[0] &= 0b11111011;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_7))
+    {
+        IO_address[0] |= 0b00000010;
+    }
+    else if (IO_address[0] & 0b00000010)
+    {
+        IO_address[0] &= 0b11111101;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_8))
+    {
+        IO_address[0] |= 0b00000001;
+    }
+    else if (IO_address[0] & 0b00000001)
+    {
+        IO_address[0] &= 0b11111110;
+    }
+
+    //1
+
+    if (glfwGetKey(window, GLFW_KEY_9))
+    {
+        IO_address[1] |= 0b10000000;
+    }
+    else if (IO_address[1] & 0b10000000)
+    {
+        IO_address[1] &= 0b01111111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_0))
+    {
+        IO_address[1] |= 0b01000000;
+    }
+    else if (IO_address[1] & 0b01000000)
+    {
+        IO_address[1] &= 0b10111111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_MINUS))
+    {
+        IO_address[1] |= 0b00100000;
+    }
+    else if (IO_address[1] & 0b00100000)
+    {
+        IO_address[1] &= 0b11011111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_EQUAL))
+    {
+        IO_address[1] |= 0b00010000;
+    }
+    else if (IO_address[1] & 0b00010000)
+    {
+        IO_address[1] &= 0b11101111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_BACKSPACE))
+    {
+        IO_address[1] |= 0b00001000;
+    }
+    else if (IO_address[1] & 0b00001000)
+    {
+        IO_address[1] &= 0b11110111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_TAB))
+    {
+        IO_address[1] |= 0b00000100;
+    }
+    else if (IO_address[1] & 0b00000100)
+    {
+        IO_address[1] &= 0b11111011;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_Q))
+    {
+        IO_address[1] |= 0b00000010;
+    }
+    else if (IO_address[1] & 0b00000010)
+    {
+        IO_address[1] &= 0b11111101;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_W))
+    {
+        IO_address[1] |= 0b00000001;
+    }
+    else if (IO_address[1] & 0b00000001)
+    {
+        IO_address[1] &= 0b11111110;
+    }
+
+    //2
+
+    if (glfwGetKey(window, GLFW_KEY_E))
+    {
+        IO_address[2] |= 0b10000000;
+    }
+    else if (IO_address[2] & 0b10000000)
+    {
+        IO_address[2] &= 0b01111111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_R))
+    {
+        IO_address[2] |= 0b01000000;
+    }
+    else if (IO_address[2] & 0b01000000)
+    {
+        IO_address[2] &= 0b10111111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_T))
+    {
+        IO_address[2] |= 0b00100000;
+    }
+    else if (IO_address[2] & 0b00100000)
+    {
+        IO_address[2] &= 0b11011111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_Y))
+    {
+        IO_address[2] |= 0b00010000;
+    }
+    else if (IO_address[2] & 0b00010000)
+    {
+        IO_address[2] &= 0b11101111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_U))
+    {
+        IO_address[2] |= 0b00001000;
+    }
+    else if (IO_address[2] & 0b00001000)
+    {
+        IO_address[2] &= 0b11110111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_I))
+    {
+        IO_address[2] |= 0b00000100;
+    }
+    else if (IO_address[2] & 0b00000100)
+    {
+        IO_address[2] &= 0b11111011;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_O))
+    {
+        IO_address[2] |= 0b00000010;
+    }
+    else if (IO_address[2] & 0b00000010)
+    {
+        IO_address[2] &= 0b11111101;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_P))
+    {
+        IO_address[2] |= 0b00000001;
+    }
+    else if (IO_address[2] & 0b00000001)
+    {
+        IO_address[2] &= 0b11111110;
+    }
+
+    //3
+
+    if (glfwGetKey(window, GLFW_KEY_LEFT_BRACKET))
+    {
+        IO_address[3] |= 0b10000000;
+    }
+    else if (IO_address[3] & 0b10000000)
+    {
+        IO_address[3] &= 0b01111111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_RIGHT_BRACKET))
+    {
+        IO_address[3] |= 0b01000000;
+    }
+    else if (IO_address[3] & 0b01000000)
+    {
+        IO_address[3] &= 0b10111111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_BACKSLASH))
+    {
+        IO_address[3] |= 0b00100000;
+    }
+    else if (IO_address[3] & 0b00100000)
+    {
+        IO_address[3] &= 0b11011111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_A))
+    {
+        IO_address[3] |= 0b00010000;
+    }
+    else if (IO_address[3] & 0b00010000)
+    {
+        IO_address[3] &= 0b11101111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_S))
+    {
+        IO_address[3] |= 0b00001000;
+    }
+    else if (IO_address[3] & 0b00001000)
+    {
+        IO_address[3] &= 0b11110111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_D))
+    {
+        IO_address[3] |= 0b00000100;
+    }
+    else if (IO_address[3] & 0b00000100)
+    {
+        IO_address[3] &= 0b11111011;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_F))
+    {
+        IO_address[3] |= 0b00000010;
+    }
+    else if (IO_address[3] & 0b00000010)
+    {
+        IO_address[3] &= 0b11111101;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_G))
+    {
+        IO_address[3] |= 0b00000001;
+    }
+    else if (IO_address[3] & 0b00000001)
+    {
+        IO_address[3] &= 0b11111110;
+    }
+
+    //4
+
+    if (glfwGetKey(window, GLFW_KEY_H))
+    {
+        IO_address[4] |= 0b10000000;
+    }
+    else if (IO_address[4] & 0b10000000)
+    {
+        IO_address[4] &= 0b01111111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_J))
+    {
+        IO_address[4] |= 0b01000000;
+    }
+    else if (IO_address[4] & 0b01000000)
+    {
+        IO_address[4] &= 0b10111111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_K))
+    {
+        IO_address[4] |= 0b00100000;
+    }
+    else if (IO_address[4] & 0b00100000)
+    {
+        IO_address[4] &= 0b11011111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_L))
+    {
+        IO_address[4] |= 0b00010000;
+    }
+    else if (IO_address[4] & 0b00010000)
+    {
+        IO_address[4] &= 0b11101111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_SEMICOLON))
+    {
+        IO_address[4] |= 0b00001000;
+    }
+    else if (IO_address[4] & 0b00001000)
+    {
+        IO_address[4] &= 0b11110111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_APOSTROPHE))
+    {
+        IO_address[4] |= 0b00000100;
+    }
+    else if (IO_address[4] & 0b00000100)
+    {
+        IO_address[4] &= 0b11111011;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_ENTER))
+    {
+        IO_address[4] |= 0b00000010;
+    }
+    else if (IO_address[4] & 0b00000010)
+    {
+        IO_address[4] &= 0b11111101;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT))
+    {
+        IO_address[4] |= 0b00000001;
+    }
+    else if (IO_address[4] & 0b00000001)
+    {
+        IO_address[4] &= 0b11111110;
+    }
+
+    //5
+
+    if (glfwGetKey(window, GLFW_KEY_Z))
+    {
+        IO_address[5] |= 0b10000000;
+    }
+    else if (IO_address[5] & 0b10000000)
+    {
+        IO_address[5] &= 0b01111111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_X))
+    {
+        IO_address[5] |= 0b01000000;
+    }
+    else if (IO_address[5] & 0b01000000)
+    {
+        IO_address[5] &= 0b10111111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_C))
+    {
+        IO_address[5] |= 0b00100000;
+    }
+    else if (IO_address[5] & 0b00100000)
+    {
+        IO_address[5] &= 0b11011111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_V))
+    {
+        IO_address[5] |= 0b00010000;
+    }
+    else if (IO_address[5] & 0b00010000)
+    {
+        IO_address[5] &= 0b11101111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_B))
+    {
+        IO_address[5] |= 0b00001000;
+    }
+    else if (IO_address[5] & 0b00001000)
+    {
+        IO_address[5] &= 0b11110111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_N))
+    {
+        IO_address[5] |= 0b00000100;
+    }
+    else if (IO_address[5] & 0b00000100)
+    {
+        IO_address[5] &= 0b11111011;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_M))
+    {
+        IO_address[5] |= 0b00000010;
+    }
+    else if (IO_address[5] & 0b00000010)
+    {
+        IO_address[5] &= 0b11111101;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_COMMA))
+    {
+        IO_address[5] |= 0b00000001;
+    }
+    else if (IO_address[5] & 0b00000001)
+    {
+        IO_address[5] &= 0b11111110;
+    }
+
+    //6
+
+    if (glfwGetKey(window, GLFW_KEY_PERIOD))
+    {
+        IO_address[6] |= 0b10000000;
+    }
+    else if (IO_address[6] & 0b10000000)
+    {
+        IO_address[6] &= 0b01111111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_SLASH))
+    {
+        IO_address[6] |= 0b01000000;
+    }
+    else if (IO_address[6] & 0b01000000)
+    {
+        IO_address[6] &= 0b10111111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT))
+    {
+        IO_address[6] |= 0b00100000;
+    }
+    else if (IO_address[6] & 0b00100000)
+    {
+        IO_address[6] &= 0b11011111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL))
+    {
+        IO_address[6] |= 0b00010000;
+    }
+    else if (IO_address[6] & 0b00010000)
+    {
+        IO_address[6] &= 0b11101111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_LEFT_ALT))
+    {
+        IO_address[6] |= 0b00001000;
+    }
+    else if (IO_address[6] & 0b00001000)
+    {
+        IO_address[6] &= 0b11110111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_SPACE))
+    {
+        IO_address[6] |= 0b00000100;
+    }
+    else if (IO_address[6] & 0b00000100)
+    {
+        IO_address[6] &= 0b11111011;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_RIGHT_ALT))
+    {
+        IO_address[6] |= 0b00000010;
+    }
+    else if (IO_address[6] & 0b00000010)
+    {
+        IO_address[6] &= 0b11111101;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL))
+    {
+        IO_address[6] |= 0b00000001;
+    }
+    else if (IO_address[6] & 0b00000001)
+    {
+        IO_address[6] &= 0b11111110;
+    }
+
+    //7
+
+    if (glfwGetKey(window, GLFW_KEY_INSERT))
+    {
+        IO_address[7] |= 0b10000000;
+    }
+    else if (IO_address[7] & 0b10000000)
+    {
+        IO_address[7] &= 0b01111111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_HOME))
+    {
+        IO_address[7] |= 0b01000000;
+    }
+    else if (IO_address[7] & 0b01000000)
+    {
+        IO_address[7] &= 0b10111111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_PAGE_UP))
+    {
+        IO_address[7] |= 0b00100000;
+    }
+    else if (IO_address[7] & 0b00100000)
+    {
+        IO_address[7] &= 0b11011111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_DELETE))
+    {
+        IO_address[7] |= 0b00010000;
+    }
+    else if (IO_address[7] & 0b00010000)
+    {
+        IO_address[7] &= 0b11101111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_END))
+    {
+        IO_address[7] |= 0b00001000;
+    }
+    else if (IO_address[7] & 0b00001000)
+    {
+        IO_address[7] &= 0b11110111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_PAGE_DOWN))
+    {
+        IO_address[7] |= 0b00000100;
+    }
+    else if (IO_address[7] & 0b00000100)
+    {
+        IO_address[7] &= 0b11111011;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_UP))
+    {
+        IO_address[7] |= 0b00000010;
+    }
+    else if (IO_address[7] & 0b00000010)
+    {
+        IO_address[7] &= 0b11111101;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_LEFT))
+    {
+        IO_address[7] |= 0b00000001;
+    }
+    else if (IO_address[7] & 0b00000001)
+    {
+        IO_address[7] &= 0b11111110;
+    }
+
+    //8
+
+    if (glfwGetKey(window, GLFW_KEY_DOWN))
+    {
+        IO_address[8] |= 0b10000000;
+    }
+    else if (IO_address[8] & 0b10000000)
+    {
+        IO_address[8] &= 0b01111111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_RIGHT))
+    {
+        IO_address[8] |= 0b01000000;
+    }
+    else if (IO_address[8] & 0b01000000)
+    {
+        IO_address[8] &= 0b10111111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_NUM_LOCK))
+    {
+        IO_address[8] |= 0b00100000;
+    }
+    else if (IO_address[8] & 0b00100000)
+    {
+        IO_address[8] &= 0b11011111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_PRINT_SCREEN))
+    {
+        IO_address[8] |= 0b00010000;
+    }
+    else if (IO_address[8] & 0b00010000)
+    {
+        IO_address[8] &= 0b11101111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_SCROLL_LOCK))
+    {
+        IO_address[8] |= 0b00001000;
+    }
+    else if (IO_address[8] & 0b00001000)
+    {
+        IO_address[8] &= 0b11110111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_PAUSE))
+    {
+        IO_address[8] |= 0b00000100;
+    }
+    else if (IO_address[8] & 0b00000100)
+    {
+        IO_address[8] &= 0b11111011;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_GRAVE_ACCENT))
+    {
+        IO_address[8] |= 0b00000010;
+    }
+    else if (IO_address[8] & 0b00000010)
+    {
+        IO_address[8] &= 0b11111101;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_KP_DIVIDE))
+    {
+        IO_address[8] |= 0b00000001;
+    }
+    else if (IO_address[8] & 0b00000001)
+    {
+        IO_address[8] &= 0b11111110;
+    }
+
+    //9
+
+    if (glfwGetKey(window, GLFW_KEY_KP_MULTIPLY))
+    {
+        IO_address[9] |= 0b10000000;
+    }
+    else if (IO_address[9] & 0b10000000)
+    {
+        IO_address[9] &= 0b01111111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_KP_SUBTRACT))
+    {
+        IO_address[9] |= 0b01000000;
+    }
+    else if (IO_address[9] & 0b01000000)
+    {
+        IO_address[9] &= 0b10111111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_KP_7))
+    {
+        IO_address[9] |= 0b00100000;
+    }
+    else if (IO_address[9] & 0b00100000)
+    {
+        IO_address[9] &= 0b11011111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_KP_8))
+    {
+        IO_address[9] |= 0b00010000;
+    }
+    else if (IO_address[9] & 0b00010000)
+    {
+        IO_address[9] &= 0b11101111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_KP_9))
+    {
+        IO_address[9] |= 0b00001000;
+    }
+    else if (IO_address[9] & 0b00001000)
+    {
+        IO_address[9] &= 0b11110111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_KP_ADD))
+    {
+        IO_address[9] |= 0b00000100;
+    }
+    else if (IO_address[9] & 0b00000100)
+    {
+        IO_address[9] &= 0b11111011;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_KP_4))
+    {
+        IO_address[9] |= 0b00000010;
+    }
+    else if (IO_address[9] & 0b00000010)
+    {
+        IO_address[9] &= 0b11111101;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_KP_5))
+    {
+        IO_address[9] |= 0b00000001;
+    }
+    else if (IO_address[9] & 0b00000001)
+    {
+        IO_address[9] &= 0b11111110;
+    }
+
+    //10
+
+    if (glfwGetKey(window, GLFW_KEY_KP_6))
+    {
+        IO_address[10] |= 0b10000000;
+    }
+    else if (IO_address[10] & 0b10000000)
+    {
+        IO_address[10] &= 0b01111111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_KP_1))
+    {
+        IO_address[10] |= 0b01000000;
+    }
+    else if (IO_address[10] & 0b01000000)
+    {
+        IO_address[10] &= 0b10111111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_KP_2))
+    {
+        IO_address[10] |= 0b00100000;
+    }
+    else if (IO_address[10] & 0b00100000)
+    {
+        IO_address[10] &= 0b11011111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_KP_3))
+    {
+        IO_address[10] |= 0b00010000;
+    }
+    else if (IO_address[10] & 0b00010000)
+    {
+        IO_address[10] &= 0b11101111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_KP_ENTER))
+    {
+        IO_address[10] |= 0b00001000;
+    }
+    else if (IO_address[10] & 0b00001000)
+    {
+        IO_address[10] &= 0b11110111;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_KP_0))
+    {
+        IO_address[10] |= 0b00000100;
+    }
+    else if (IO_address[10] & 0b00000100)
+    {
+        IO_address[10] &= 0b11111011;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_KP_DECIMAL))
+    {
+        IO_address[10] |= 0b00000010;
+    }
+    else if (IO_address[10] & 0b00000010)
+    {
+        IO_address[10] &= 0b11111101;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE))
+    {
+        IO_address[10] |= 0b00000001;
+    }
+    else if (IO_address[10] & 0b00000001)
+    {
+        IO_address[10] &= 0b11111110;
     }
 }
 
