@@ -35,7 +35,7 @@ void drawGrid() {
 
 void draw_background()
 {
-    int gridSize = 64;
+    int gridSize = 128;
     float size = 2.0f / gridSize;
     uint16_t tile_counter = 0x0401;
     uint16_t rom_address = 0x0000;
@@ -43,7 +43,7 @@ void draw_background()
     int8_t scroll_offset_x = getValue(0x0800);
     int8_t scroll_offset_y = getValue(0x0801);
 
-    while (tile_counter < 0x0481)
+    while (tile_counter < 0x0601)
     {
         rom_address = 0x0000;
         rom_address |= getValue(tile_counter); // get the high bit from the VRAM
@@ -62,13 +62,13 @@ void draw_background()
 
                 //colour = 0b00011001; //TEST!!!!!!
 
-                float x = (- 1.0f + (i + 8 * (tile_count % 8)) * size); //FOR FUTURE REFRERENCE: the glVertex2f function goes from -1 to +1 with -1 being the far left and +1 being the far right
-                float y = (- 1.0f + (j + 8 * (tile_count / 8)) * size); //same as above but for up and down
+                float x = (- 1.0f + (i + 8 * (tile_count % 16)) * size); //FOR FUTURE REFRERENCE: the glVertex2f function goes from -1 to +1 with -1 being the far left and +1 being the far right
+                float y = (- 1.0f + (j + 8 * (tile_count / 16)) * size); //same as above but for up and down
 
                 //printf("offset: %d number put into x: %f x before: %f\n", scroll_offset_x, (float)scroll_offset_x / 32.0f,x);
 
-                x += (float)scroll_offset_x / 32.0f; //smooth scrolling offset
-                y += (float)scroll_offset_y / 32.0f; //smooth scrolling offset
+                x += (float)scroll_offset_x * size; //smooth scrolling offset
+                y += (float)scroll_offset_y * size; //smooth scrolling offset
 
                 //printf("offset: %d number put into x: %f x after: %f\n\n", scroll_offset_x, (float)scroll_offset_x / 32.0f, x);
 
@@ -114,7 +114,7 @@ void draw_background()
 
 void draw_foreground()
 {
-    int gridSize = 64;
+    int gridSize = 128;
     float size = 2.0f / gridSize;
     uint16_t tile_counter = 0x0601;
     uint16_t rom_address = 0x0000;
@@ -135,37 +135,39 @@ void draw_foreground()
         rom_address |= getValue(tile_counter); // get the low bit from the VRAM
         tile_counter++; //increment the tile counter for the next pass
 
-        colour = getValue(rom_address); //get the colour of the pixel at the rom address
-        rom_address++;
-        /*if (rom_address != 1)
+        for (int i = 0; i < 8; i++)
         {
-            printf("%d,%d,%d,%d,%d\n", rom_address,getValue(0x0601), getValue(0x0602), getValue(0x0603), getValue(0x0604));
-        }*/
-        if (rom_address == 0x8051)
-        {
-            printf("%d", colour);
-        }
+            for (int j = 0; j < 8; j++)
+            {
+                colour = getValue(rom_address); //get the colour of the pixel at the rom address
+                rom_address++;
+                /*if (rom_address != 1)
+                {
+                    printf("%d,%d,%d,%d,%d\n", rom_address,getValue(0x0601), getValue(0x0602), getValue(0x0603), getValue(0x0604));
+                }*/
 
-        if (colour >= 0x80)
-        {
-            float x = -1.0f + (scroll_offset_x * size); //smooth scrolling offset
-            float y = -1.0f + (scroll_offset_y * size); //smooth scrolling offset
+                if (colour >= 0x80)
+                {
+                    float x = -1.0f + ((i + scroll_offset_x) * size); //smooth scrolling offset
+                    float y = -1.0f + ((j + scroll_offset_y) * size); //smooth scrolling offset
 
-            float blue = (float)(colour & 0b00000011) / (float)0b00000011;
-            colour = colour >> 2;
-            float green = (float)(colour & 0b00000011) / (float)0b00000011;
-            colour = colour >> 2;
-            float red = (float)(colour & 0b00000011) / (float)0b00000011;
+                    float blue = (float)(colour & 0b00000011) / (float)0b00000011;
+                    colour = colour >> 2;
+                    float green = (float)(colour & 0b00000011) / (float)0b00000011;
+                    colour = colour >> 2;
+                    float red = (float)(colour & 0b00000011) / (float)0b00000011;
 
-            glBegin(GL_QUADS);
+                    glBegin(GL_QUADS);
 
-            glColor3f(red, green, blue);
+                    glColor3f(red, green, blue);
 
-            glVertex2f(x, y);
-            glVertex2f(x + size, y);
-            glVertex2f(x + size, y + size);
-            glVertex2f(x, y + size);
-            glEnd();
+                    glVertex2f(x, y);
+                    glVertex2f(x + size, y);
+                    glVertex2f(x + size, y + size);
+                    glVertex2f(x, y + size);
+                    glEnd();
+                }
+            }
         }
     }
 }
@@ -1004,11 +1006,11 @@ void GPUtick() {
     glClear(GL_COLOR_BUFFER_BIT);
     //drawGrid();
     /*TEST*/
-    //for (int i = 0; i < 128; i+=2)
-    //{
-    //    setValue(0x0401 + i, 0x8F);
-    //    setValue(0x0402 + i, 0xFF);
-    //}
+    for (int i = 0; i < 512; i+=2)
+    {
+        setValue(0x0401 + i, 0x8F);
+        setValue(0x0402 + i, 0xFF);
+    }
     //setValue(0x0799, 0x40);
     /*END TEST*/
     draw_background();
