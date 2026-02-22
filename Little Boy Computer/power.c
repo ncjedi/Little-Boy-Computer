@@ -12,9 +12,6 @@ int main()
 	prog_rom[1] = 0x10;
 	prog_rom[2] = 0x01;
 
-	setValue(0x080c, 70);
-	setValue(0x080d, 0x30);
-
 	GPUinit();
 	thrd_create(&sound_thread, PlaySpeaker, NULL);
 	CPU_clock();

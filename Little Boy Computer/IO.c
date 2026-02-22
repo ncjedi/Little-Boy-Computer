@@ -122,9 +122,9 @@ int PlaySpeaker(void* data)
 	{
 		last_cpu_stage = cpu_stage;
 
-		if (getValue(0x080c) > 0 && getValue(0x080c) < 108 && getValue(0x080d) > 0 && cpu_stage != last_cpu_stage)
+		if (getValue(0x080d) > 0 && getValue(0x080d) < 108 && getValue(0x080e) > 0 && cpu_stage != last_cpu_stage)
 		{
-			Beep(notes[getValue(0x080c)], (getValue(0x080d) * 1000) / 0xFF);
+			Beep(notes[getValue(0x080d)], (getValue(0x080e) * 1000) / 0xFF);
 		}
 	}
 }

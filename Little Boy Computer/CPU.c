@@ -1929,6 +1929,8 @@ LDA_IM()
 		flags &= 0b11110111; //negative
 	}
 
+	program_counter++;
+
 	return 1;
 }
 
@@ -2085,6 +2087,8 @@ LDX_IM()
 		flags &= 0b11110111; //negative
 	}
 
+	program_counter++;
+
 	return 1;
 }
 
@@ -2162,6 +2166,8 @@ LDY_IM()
 	{
 		flags &= 0b11110111; //negative
 	}
+
+	program_counter++;
 
 	return 1;
 }

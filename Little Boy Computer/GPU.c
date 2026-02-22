@@ -107,6 +107,64 @@ void draw_background()
     }
 }
 
+void draw_foreground()
+{
+    int gridSize = 64;
+    float size = 2.0f / gridSize;
+    uint16_t tile_counter = 0x0601;
+    uint16_t rom_address = 0x0000;
+    uint8_t colour = 0x00;
+    int8_t scroll_offset_x;
+    int8_t scroll_offset_y;
+
+    while (tile_counter < 0x07FD)
+    {
+        scroll_offset_x = getValue(tile_counter);
+        tile_counter++;
+        scroll_offset_y = getValue(tile_counter);
+        tile_counter++;
+        rom_address = 0x0000;
+        rom_address |= getValue(tile_counter); // get the high bit from the VRAM
+        tile_counter++; //increment the tile counter
+        rom_address = rom_address << 8; //shift the high bit to it's position
+        rom_address |= getValue(tile_counter); // get the low bit from the VRAM
+        tile_counter++; //increment the tile counter for the next pass
+
+        colour = getValue(rom_address); //get the colour of the pixel at the rom address
+        rom_address++;
+        /*if (rom_address != 1)
+        {
+            printf("%d,%d,%d,%d,%d\n", rom_address,getValue(0x0601), getValue(0x0602), getValue(0x0603), getValue(0x0604));
+        }*/
+        if (rom_address == 0x8051)
+        {
+            printf("%d", colour);
+        }
+
+        if (colour >= 0x80)
+        {
+            float x = -1.0f + (scroll_offset_x * size); //smooth scrolling offset
+            float y = -1.0f + (scroll_offset_y * size); //smooth scrolling offset
+
+            float blue = (float)(colour & 0b00000011) / (float)0b00000011;
+            colour = colour >> 2;
+            float green = (float)(colour & 0b00000011) / (float)0b00000011;
+            colour = colour >> 2;
+            float red = (float)(colour & 0b00000011) / (float)0b00000011;
+
+            glBegin(GL_QUADS);
+
+            glColor3f(red, green, blue);
+
+            glVertex2f(x, y);
+            glVertex2f(x + size, y);
+            glVertex2f(x + size, y + size);
+            glVertex2f(x, y + size);
+            glEnd();
+        }
+    }
+}
+
 void GetKeys()
 {
     //function keys
@@ -949,6 +1007,7 @@ void GPUtick() {
     //setValue(0x0799, 0x40);
     /*END TEST*/
     draw_background();
+    draw_foreground();
     glfwSwapBuffers(window);
     glfwPollEvents();
     GetKeys();
@@ -957,7 +1016,7 @@ void GPUtick() {
 void GPUinit()
 {
     if (!glfwInit()) return -1;
-    window = glfwCreateWindow(640, 640, "64x64 Grid", NULL, NULL);
+    window = glfwCreateWindow(800, 800, "Little Boy Computer", NULL, NULL);
     if (!window) { glfwTerminate(); return -1; }
     glfwMakeContextCurrent(window);
 }
