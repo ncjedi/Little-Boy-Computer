@@ -1,0 +1,292 @@
+INSTRUCTIONS:
+
+Instructions are implimented very similarly to the 6502 but the opcodes are 
+different as well as there being a few differences in implimentation
+
+OPCODES:
+
+Below is the list of opcodes. there are a few different addressing types:
+
+IM - immediate - uses the next byte as the value
+
+AB - absolute - uses the next two bytes as an address to the value
+
+ABX - absolute X - uses the next two bytes offset by the x register as an address 
+		   to the value
+
+ABY - absolute Y - uses the next two bytes offset by the y register as an address 
+		   to the value
+
+INDX - indirect X - uses the next two bytes which each byte offset by the x register
+                    as an index to addressess within the 0x00 - 0xFF range then uses
+                    the values from those addressess as the address to the value
+
+INDY - indirect Y - uses the next two bytes offset by the y register
+                    as an index to addressess within the 0x00 - 0xFF range then uses
+                    the values from those addressess as the address to the value
+
+some special addressing types:
+
+AC - accumulator - the accumulator is the value
+
+IND - indirect - same as indirect X and Y but without the offset
+
+NOP:
+0x00 - NOP - no action
+
+Access:
+0x10 - LDA_IM - load value into the accumulator
+0x11 - LDA_AB
+0x12 - LDA_ABX
+0x13 - LDA_ABY
+0x14 - LDA_INDX
+0x15 - LDA_INDY
+0x16 - STA_AB - store value of the accumulator into memory
+0x17 - STA_ABX
+0x18 - STA_ABY
+0x19 - STA_INDX
+0x1a - STA_INDY
+0x1b - LDX_IM - load value into x register
+0x1c - LDX_AB
+0x1d - LDX_ABY
+0x1e - STX - store value of x into memory (AB)
+0x1f - LDY_IM - load value into y register
+0x20 - LDY_AB
+0x21 - LDY_ABX
+0x22 - STY - store value of y into memory (AB)
+
+Transfer:
+0x23 - TAX - transfer accumulator to x register
+0x24 - TXA - transfer x register to accumulator
+0x25 - TAY - transfer accumulator to y register
+0x26 - TYA - transfter y register to accumulator
+
+Math:
+0x27 - ADC_IM - add with carry bit (accumulator + value + carry bit)
+0x28 - ADC_AB
+0x29 - ADC_ABX
+0x2A - ADC_ABY
+0x2B - ADC_INDX
+0x2C - ADC_INDY
+0x2D - SBC_IM - subtract with carry bit (accumulator - value + carry bit)
+0x2E - SBC_AB
+0x2F - SBC_ABX
+0x30 - SBC_ABY
+0x31 - SBC_INDX
+0x32 - SBC_INDY
+0x33 - INC_AB - increment value
+0x34 - INC_ABX
+0x35 - DEC_AB - decrement value
+0x36 - DEC_ABX
+0x37 - INX - increment x register
+0x38 - DEX - decrement x register
+0x39 - INY - increment y register
+0x3A - DEY - decrement y register
+
+Shift:
+0x3B - ASL_AC - arithmatic shift left - value = value << 1
+0x3C - ASL_AB
+0x3D - ASL_ABX
+0x3E - LSR_AC - logical shift right - value = value >> 1
+0x3F - LSR_AB
+0x40 - LSR_ABX
+0x41 - ROL_AC - roll left - value = value << 1 with the carry bit put in the right most bit
+0x42 - ROL_AB
+0x43 - ROL_ABX
+0x44 - ROR_AC - roll right - value = value >> 1 with the carry bit put in the left most bit
+0x45 - ROR_AB
+0x46 - ROR_ABX
+
+Bitwise:
+0x47 - AND_IM - accumulator &= value
+0x48 - AND_AB
+0x49 - AND_ABX
+0x4A - AND_ABY
+0x4B - AND_INDX
+0x4C - AND_INDY
+0x4D - ORA_IM - accumulator |= value
+0x4E - ORA_AB
+0x4F - ORA_ABX
+0x50 - ORA_ABY
+0x51 - ORA_INDX
+0x52 - ORA_INDY
+0x53 - EOR_IM - accumulator ^= value
+0x54 - EOR_AB
+0x55 - EOR_ABX
+0x56 - EOR_ABY
+0x57 - EOR_INDX
+0x58 - EOR_INDY
+0x59 - BIT_IM - sets flags based on value (if bit 7 then negative is set, if bit 6 then overflow is set, if the result of value & acc is zero then zero is set)
+0x5A - BIT_AB
+
+Compare:
+0x5B - CMP_IM - compares value with accumulator. sets carry bit if accumulator is greater than value. sets zero bit if they are equal. sets negitive bit if value is greater than accumulator
+0x5C - CMP_AB
+0x5D - CMP_ABX
+0x5E - CMP_ABY
+0x5F - CMP_INDX
+0x60 - CMP_INDY
+0x61 - CPX_IM - compares value with x register. same flag logic as CMP
+0x62 - CPX_AB
+0x63 - CPY_IM - compares value with y register. same flag logic as CMP
+0x64 - CPY_AB
+
+Branch:
+0x65 - BCC - branch to PC(at value) + value(signed) if carry bit is clear
+0x66 - BCS - branch to PC(at value) + value(signed) if carry bit is set
+0x67 - BEQ - branch to PC(at value) + value(signed) if zero bit is set
+0x68 - BNE - branch to PC(at value) + value(signed) if zero bit is clear
+0x69 - BPL - branch to PC(at value) + value(signed) if negitive bit is clear
+0x6A - BMI - branch to PC(at value) + value(signed) if negitive bit is set
+0x6B - BVC - branch to PC(at value) + value(signed) if overflow bit is clear
+0x6C - BVS - branch to PC(at value) + value(signed) if overflow bit is set
+
+Jump:
+0x6D - JMP_AB - sets the program counter to value
+0x6E - JMP_IN
+0x6F - JSR - jump to subroutine (AB)
+0x70 - RTS - return from subroutine
+
+Stack:
+0x71 - PHA - push accumulator to stack
+0x72 - PLA - pop accumulator from stack
+0x73 - PHP - push flags to stack
+0x74 - PLP - pop flags from stack
+0x75 - TXS - set stack position to x register
+0x76 - TSX - set x register to stack position
+
+Flags:
+0x77 - CLC - clear carry bit
+0x78 - SEC - set carry bit
+0x79 - CLV - clear overflow bit
+
+ADDRESSING:
+
+0x0000 - 0x0400 - RAM
+0x0401 - 0x0801 - VRAM
+0x0802 - 0x1000 - I/O
+0x1001 - 0x7FFF - Cart Program Data
+0x8000 - 0xFFFF - Cart Sprite Data
+
+VRAM:
+
+0x0800 and 0x0801 are used for the scrolling offset for background tiles.
+
+0x0401 through 0x0481 are where the addresses of sprites for the background are kept.
+
+I/O:
+
+KEYBOARD:
+
+the keyboard keys are mapped to 0x0801 - 0x080b with each bit representing a key.
+
+keys for each bit (left to right in the addresses):
+
+0 1
+1 2
+2 3
+3 4
+4 5
+5 6
+6 7
+7 8
+8 9
+9 0
+10 -
+11 +
+12 backspace
+13 tab
+14 Q
+15 W
+16 E
+17 R
+18 T
+19 Y
+20 U
+21 I
+22 O
+23 P
+24 [
+25 ]
+26 \
+27 A
+28 S
+29 D
+30 F
+31 G
+32 H
+33 J
+34 K
+35 L
+36 ;
+37 '
+38 enter
+39 left shift
+40 Z
+41 X
+42 C
+43 V
+44 B
+45 N
+46 M
+47 ,
+48 .
+49 /
+50 right shift
+51 left control
+52 left alt
+53 space
+54 right alt
+55 right control
+56 insert
+57 home
+58 page up
+59 delete
+60 end
+61 page down
+62 arrow up
+63 arrow left
+64 arrow down
+65 arrow right
+66 num lock
+67 print screen
+68 scroll lock
+69 pause
+70 ~
+71 num pad /
+72 num pad *
+73 num pad -
+74 num pad 7
+75 num pad 8
+76 num pad 9
+77 num pad +
+78 num pad 4
+79 num pad 5
+80 num pad 6
+81 num pad 1
+82 num pad 2
+83 num pad 3
+84 num pad enter
+85 num pad 0
+86 num pad .
+87 escape
+
+
+SPEAKERS:
+
+0x080c is the speaker frequency code and 0x080d is the duration of the note
+
+the frequency codes allowed are 0x01 through 0x6C which each frequency code corrisponding
+to a note from C0 to B8
+
+durations are measured in 255ths of a second.
+
+if an allowed frequency code and duration higher than 0x01 is in the I/O addresses then
+the speakers will attempt to play a sound though durations lower than around 0x10 will be
+too fast for the speakers to pick up on.
+
+CARTRIDGE:
+
+the program counter starts at the first byte in the cartridge.
+
+the cartridge is readable/writeable so be careful when writing to addresses.

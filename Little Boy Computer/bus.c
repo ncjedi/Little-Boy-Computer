@@ -7,8 +7,8 @@
 
 uint16_t RAMoffset = 0x0000;
 uint16_t back_ramOffset = 0x0401;
-uint16_t front_ramOffset = 0x0601;
-uint16_t IO_offset = 0x0801;
+uint16_t front_ramOffset = 0x0602;
+uint16_t IO_offset = 0x0802;
 uint16_t prog_romOffset = 0x1001;
 uint16_t graphic_romOffset = 0x8000;
 
@@ -18,11 +18,11 @@ uint8_t getValue(uint16_t address)
 	{
 		return RAM[address - RAMoffset]; /*RAM addresses*/
 	}
-	else if (address <= 0x0600)
+	else if (address <= 0x0601)
 	{
 		return back_ram[address - back_ramOffset]; /*VRAM back addresses also if you want to read from it for some reason!*/
 	}
-	else if (address <= 0x0800)
+	else if (address <= 0x0801)
 	{
 		return front_ram[address - front_ramOffset]; /*VRAM foreground addresses... if you wanted to read from those for some reason?*/
 	}
@@ -63,8 +63,9 @@ void setValue(uint16_t address, uint8_t value)
 	{
 		prog_rom[address - prog_romOffset] = value; /*read from program rom*/
 	}
-	else
+	else if(address <= 0xFFFF)
 	{
 		graphic_rom[address - graphic_romOffset] = value; /*read from graphic rom*/
 	}
+	return 0x0000;
 }

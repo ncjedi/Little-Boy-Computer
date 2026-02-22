@@ -426,23 +426,21 @@ void CPU_clock()
 		{
 			start_time = clock();
 
+			GPUtick();
+
 			if (!wait)
 			{
 				run_opcode();
-				GPUtick();
-
-				if (cpu_stage)
-				{
-					cpu_stage = 0;
-				}
-				else
-				{
-					cpu_stage = 1;
-				}
 			}
 			else
 			{
 				wait--;
+			}
+
+			cpu_stage++;
+			if (cpu_stage > 100)
+			{
+				cpu_stage = 0;
 			}
 		}
 

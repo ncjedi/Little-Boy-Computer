@@ -1,6 +1,7 @@
 #include "IO.h"
 #include "Windows.h"
 #include "CPU.h"
+#include <stdio.h>
 
 int notes[108] =
 {
@@ -114,10 +115,10 @@ int notes[108] =
 	7902
 };
 
-void PlaySpeaker()
+int PlaySpeaker(void* data)
 {
 	int last_cpu_stage = cpu_stage;
-	while (1);
+	while (1)
 	{
 		last_cpu_stage = cpu_stage;
 

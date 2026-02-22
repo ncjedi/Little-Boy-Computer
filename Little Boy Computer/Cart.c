@@ -4,6 +4,41 @@
 #include "Windows.h"
 
 uint8_t fullFile[0xEFFE];
+TCHAR szFile[260] = { 0 };
+
+void RecompileFullFile()
+{
+    int i = 0;
+
+    while (i < 0x6FFF)
+    {
+        fullFile[i] = prog_rom[i];
+        i++;
+    }
+
+    while (i < 0xEFFE)
+    {
+        fullFile[i] = graphic_rom[i - 0x6FFF];
+        i++;
+    }
+}
+
+void WriteToCart()
+{
+    FILE* cart;
+
+    errno_t err = _tfopen_s(&cart, szFile, L"wb");
+    if (err)
+    {
+        _tprintf(_T("szFile is: %s"), szFile);
+    }
+    else if (cart)
+    {
+        RecompileFullFile();
+        fwrite(fullFile, sizeof(uint8_t), 0xEFFE, cart);
+        fclose(cart);
+    }
+}
 
 void splitFullFile()
 {
@@ -17,10 +52,6 @@ void splitFullFile()
 
     while (i < 0xEFFE)
     {
-        if (i == 32768)
-        {
-            printf("%d", fullFile[i]);
-        }
         graphic_rom[i - 0x6FFF] = fullFile[i];
         i++;
     }
@@ -29,7 +60,6 @@ void splitFullFile()
 void readCart()
 {
     OPENFILENAME ofn;
-    TCHAR szFile[260] = { 0 };
     char* fileName;
     HWND hwnd = NULL;
     FILE *cart;
