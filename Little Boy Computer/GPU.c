@@ -6,6 +6,11 @@
 
 GLFWwindow* window;
 
+void if_window_resized(GLFWwindow* window, int width, int height)
+{
+    glViewport(0, 0, width, height);
+}
+
 void drawGrid() {
     int gridSize = 64;
     float size = 2.0f / gridSize;
@@ -1019,4 +1024,5 @@ void GPUinit()
     window = glfwCreateWindow(800, 800, "Little Boy Computer", NULL, NULL);
     if (!window) { glfwTerminate(); return -1; }
     glfwMakeContextCurrent(window);
+    glfwSetFramebufferSizeCallback(window, if_window_resized);
 }
