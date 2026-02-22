@@ -35,8 +35,8 @@ void draw_background()
     uint16_t tile_counter = 0x0401;
     uint16_t rom_address = 0x0000;
     uint8_t colour = 0x00;
-    int8_t scroll_offset_x = getValue(0x0799);
-    int8_t scroll_offset_y = getValue(0x0800);
+    int8_t scroll_offset_x = getValue(0x0800);
+    int8_t scroll_offset_y = getValue(0x0801);
 
     while (tile_counter < 0x0481)
     {
@@ -117,6 +117,10 @@ void GetKeys()
     if (glfwGetKey(window, GLFW_KEY_F1))
     {
         readCart();
+    }
+    if (glfwGetKey(window, GLFW_KEY_F2))
+    {
+        WriteToCart();
     }
 
     //keyboard keys
@@ -937,12 +941,12 @@ void GPUtick() {
     glClear(GL_COLOR_BUFFER_BIT);
     //drawGrid();
     /*TEST*/
-    for (int i = 0; i < 128; i+=2)
-    {
-        setValue(0x0401 + i, 0x8F);
-        setValue(0x0402 + i, 0xFF);
-    }
-    setValue(0x0799, 0x40);
+    //for (int i = 0; i < 128; i+=2)
+    //{
+    //    setValue(0x0401 + i, 0x8F);
+    //    setValue(0x0402 + i, 0xFF);
+    //}
+    //setValue(0x0799, 0x40);
     /*END TEST*/
     draw_background();
     glfwSwapBuffers(window);

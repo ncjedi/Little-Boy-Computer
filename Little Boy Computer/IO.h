@@ -4,4 +4,4 @@
 
 uint8_t IO_address[0x0200]; //IO addresses (memory addresses 0x0801 - 0x1000)
 
-void PlaySpeaker();
+int PlaySpeaker(void* data);
