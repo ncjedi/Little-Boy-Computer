@@ -369,6 +369,8 @@ void run_opcode()
 	case 0x79:
 		CLV();
 		break;
+	default:
+		break;
 	}
 }
 
@@ -414,6 +416,20 @@ uint8_t popFromStack()
 	return getValue(stack_counter);
 }
 
+void CPU_reset()
+{
+	reg_x = 0x00;
+	reg_y = 0x00;
+	reg_z = 0x00;
+	accumulator = 0x00;
+	flags = 0x00;
+	address = 0x0000; //address taken from input in memory
+	program_counter = 0x1001; //location the CPU is currently looking at in memory.
+	stack_counter = 0x00; //current location on the stack
+	cpu_stage = 0;
+	wait = 0; //how long to wait after certain actions to make the CPU not do multiple actions at once
+}
+
 void CPU_clock()
 {
 	clock_t start_time = clock();
@@ -426,6 +442,7 @@ void CPU_clock()
 		{
 			start_time = clock();
 
+			UpdateIO();
 			GPUtick();
 
 			if (!wait)
@@ -443,7 +460,10 @@ void CPU_clock()
 				cpu_stage = 0;
 			}
 		}
-
+		/*else
+		{
+			printf("hi");
+		}*/
 		end_time = clock();
 	}
 }
@@ -997,6 +1017,7 @@ int BCC()
 		program_counter += (int8_t)getValue(program_counter);
 		return 2;
 	}
+	program_counter++;
 	return 1;
 }
 
@@ -1008,6 +1029,7 @@ int BCS()
 		program_counter += (int8_t)getValue(program_counter);
 		return 2;
 	}
+	program_counter++;
 	return 1;
 }
 
@@ -1019,6 +1041,7 @@ int BEQ()
 		program_counter += (int8_t)getValue(program_counter);
 		return 2;
 	}
+	program_counter++;
 	return 1;
 }
 
@@ -1098,6 +1121,7 @@ int BMI()
 		program_counter += (int8_t)getValue(program_counter);
 		return 2;
 	}
+	program_counter++;
 	return 1;
 }
 
@@ -1109,6 +1133,7 @@ int BNE()
 		program_counter += (int8_t)getValue(program_counter);
 		return 2;
 	}
+	program_counter++;
 	return 1;
 }
 
@@ -1120,6 +1145,7 @@ int BPL()
 		program_counter += (int8_t)getValue(program_counter);
 		return 2;
 	}
+	program_counter++;
 	return 1;
 }
 
@@ -1131,6 +1157,7 @@ int BVC()
 		program_counter += (int8_t)getValue(program_counter);
 		return 2;
 	}
+	program_counter++;
 	return 1;
 }
 
@@ -1142,6 +1169,7 @@ int BVS()
 		program_counter += (int8_t)getValue(program_counter);
 		return 2;
 	}
+	program_counter++;
 	return 1;
 }
 

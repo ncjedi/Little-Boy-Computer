@@ -98,10 +98,4 @@ void readCart()
         // User cancelled or an error occurred
         //_tprintf(_T("Operation cancelled or failed.\n"));
     }
-	/*TEST FOR CORNERS
-	graphic_rom[0x1000] = 0b00111011; //TEST!!!!!! bottom left 1
-	graphic_rom[0x1007] = 0b00001011; //TEST!!!!!! top left 2 
-	graphic_rom[0x103F] = 0b00110100; //TEST!!!!!! top right 4
-	graphic_rom[0x1038] = 0b00110000; //TEST!!!!!! bottom right 3
-	TEST FOR CORNERS*/
 }

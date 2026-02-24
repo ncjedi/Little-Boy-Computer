@@ -4,6 +4,7 @@
 #include "bus.h"
 #include "IO.h"
 #include <threads.h>
+#include <stdio.h>
 
 int main()
 {
@@ -13,6 +14,7 @@ int main()
 	prog_rom[2] = 0x01;
 
 	GPUinit();
+	IOFilesInit();
 	thrd_create(&sound_thread, PlaySpeaker, NULL);
 	CPU_clock();
 	thrd_join(sound_thread, NULL);
