@@ -5,5 +5,5 @@
 uint8_t IO_address[0x07FF]; //IO addresses (memory addresses 0x0802 - 0x1000)
 
 void IOFilesInit();
-void UpdateIO();
+int UpdateIO(void* data);
 int PlaySpeaker(void* data);

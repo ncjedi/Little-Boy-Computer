@@ -162,42 +162,51 @@ void IOFilesInit()
 	}
 }
 
-void UpdateIO()
+int UpdateIO(void* data)
 {
 	FILE* input_file = NULL;
 	FILE* output_file = NULL;
 	errno_t err;
+	int last_cpu_stage = 0;
 
-	//read input file
-	err = fopen_s(&input_file, "./IO/lbc_input.txt", "rb");
-	if (!err)
+	while (1)
 	{
-		fread(input_file_data, sizeof(uint8_t), 0x03F8, input_file);
-		fclose(input_file);
-	}
-	else
-	{
-		printf("IO input file error: %d", err);
-	}
-	for (int i = 0; i < sizeof(input_file_data); i++)
-	{
-		IO_address[i + 0x000d] = input_file_data[i];
-	}
+		if (cpu_stage != last_cpu_stage)
+		{
+			last_cpu_stage = cpu_stage;
 
-	//initialize output file
-	for (int i = 0; i < sizeof(output_file_data); i++)
-	{
-		output_file_data[i] = IO_address[i+sizeof(input_file_data)+0x000d];
-	}
-	err = fopen_s(&output_file, "./IO/lbc_output.txt", "wb");
-	if (!err)
-	{
-		fwrite(output_file_data, sizeof(uint8_t), 0x03F8, output_file);
-		fclose(output_file);
-	}
-	else
-	{
-		printf("IO output file error: %d", err);
+			//read input file
+			err = fopen_s(&input_file, "./IO/lbc_input.txt", "rb");
+			if (!err)
+			{
+				fread(input_file_data, sizeof(uint8_t), 0x03F8, input_file);
+				fclose(input_file);
+			}
+			else
+			{
+				printf("IO input file error: %d", err);
+			}
+			for (int i = 0; i < sizeof(input_file_data); i++)
+			{
+				IO_address[i + 0x000d] = input_file_data[i];
+			}
+
+			//initialize output file
+			for (int i = 0; i < sizeof(output_file_data); i++)
+			{
+				output_file_data[i] = IO_address[i + sizeof(input_file_data) + 0x000d];
+			}
+			err = fopen_s(&output_file, "./IO/lbc_output.txt", "wb");
+			if (!err)
+			{
+				fwrite(output_file_data, sizeof(uint8_t), 0x03F8, output_file);
+				fclose(output_file);
+			}
+			else
+			{
+				printf("IO output file error: %d", err);
+			}
+		}
 	}
 }
 

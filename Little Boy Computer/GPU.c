@@ -234,7 +234,9 @@ void GetKeys()
     }
     if (glfwGetKey(window, GLFW_KEY_F1))
     {
+        cpu_pause = 1;
         readCart();
+        cpu_pause = 0;
     }
     if (glfwGetKey(window, GLFW_KEY_F2))
     {
@@ -242,7 +244,9 @@ void GetKeys()
     }
     if (glfwGetKey(window, GLFW_KEY_F3))
     {
+        cpu_pause = 1;
         CPU_reset();
+        cpu_pause = 0;
     }
     if (glfwGetKey(window, GLFW_KEY_F5))
     {
@@ -1064,20 +1068,30 @@ void GetKeys()
 }
 
 void GPUtick() {
-    glClear(GL_COLOR_BUFFER_BIT);
-    //drawGrid();
-    draw_background();
-    draw_foreground();
-    glfwSwapBuffers(window);
-    glfwPollEvents();
-    GetKeys();
+    int last_cpu_stage = 0;
+    while (1)
+    {
+        if (cpu_stage != last_cpu_stage)
+        {
+            last_cpu_stage = cpu_stage;
+            //printf("GPU!");
+            glClear(GL_COLOR_BUFFER_BIT);
+            //drawGrid();
+            draw_background();
+            draw_foreground();
+            glfwSwapBuffers(window);
+            glfwPollEvents();
+            GetKeys();
+        }
+    }
 }
 
-void GPUinit()
+int GPUinit(void* data)
 {
     if (!glfwInit()) return -1;
     window = glfwCreateWindow(800, 800, "Little Boy Computer", NULL, NULL);
     if (!window) { glfwTerminate(); return -1; }
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, if_window_resized);
+    GPUtick();
 }

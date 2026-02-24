@@ -19,6 +19,7 @@ int cpu_stage = 0;
 int key_pressed;
 int fa_key; //the second value in the buffer for function and arrow keys
 int wait = 0; //how long to wait after certain actions to make the CPU not do multiple actions at once
+int cpu_pause = 0; //pause the cpu thread
 
 void run_opcode()
 {
@@ -426,7 +427,6 @@ void CPU_reset()
 	address = 0x0000; //address taken from input in memory
 	program_counter = 0x1001; //location the CPU is currently looking at in memory.
 	stack_counter = 0x00; //current location on the stack
-	cpu_stage = 0;
 	wait = 0; //how long to wait after certain actions to make the CPU not do multiple actions at once
 }
 
@@ -438,12 +438,9 @@ void CPU_clock()
 	while (1)
 	{
 		float elapsed_time = ((float)end_time - (float)start_time) / CLOCKS_PER_SEC;
-		if (elapsed_time >= 0.000001)
+		if (elapsed_time >= 0.000001 && !cpu_pause)
 		{
 			start_time = clock();
-
-			UpdateIO();
-			GPUtick();
 
 			if (!wait)
 			{
