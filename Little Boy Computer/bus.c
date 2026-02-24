@@ -47,11 +47,11 @@ void setValue(uint16_t address, uint8_t value)
 	{
 		RAM[address - RAMoffset] = value; /*write to RAM*/
 	}
-	else if (address <= 0x0600)
+	else if (address <= 0x0601)
 	{
 		back_ram[address - back_ramOffset] = value; /*VRAM back addresses*/
 	}
-	else if (address <= 0x0800)
+	else if (address <= 0x0801)
 	{
 		front_ram[address - front_ramOffset] = value; /*VRAM foreground addresses*/
 	}

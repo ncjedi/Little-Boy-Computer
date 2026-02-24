@@ -3,8 +3,55 @@
 #include "bus.h"
 #include "Cart.h"
 #include "IO.h"
+#include "CPU.h"
 
 GLFWwindow* window;
+int debug_mode = 0;
+uint16_t debug_holder[1024];
+
+void debug_background()
+{
+    if (debug_mode == 0)
+    {
+        //PUT TEST VALUES INTO VRAM
+        for (int i = 0; i < 512; i += 2)
+        {
+            debug_holder[i] = getValue(0x0401 + i);
+            debug_holder[i + 1] = getValue(0x0402 + i);
+            setValue(0x0401 + i, 0x8F);
+            setValue(0x0402 + i, 0xFF);
+        }
+        
+        //TEST FOR CORNERS
+        debug_holder[512] = graphic_rom[0x0FFF];
+        debug_holder[513] = graphic_rom[0x1006];
+        debug_holder[514] = graphic_rom[0x103E];
+        debug_holder[515] = graphic_rom[0x1037];
+
+        graphic_rom[0x0FFF] = 0b00111011; //TEST!!!!!! bottom left 1
+        graphic_rom[0x1006] = 0b00001011; //TEST!!!!!! top left 2 
+        graphic_rom[0x103E] = 0b00110100; //TEST!!!!!! top right 4
+        graphic_rom[0x1037] = 0b00110000; //TEST!!!!!! bottom right 3
+        //TEST FOR CORNERS
+
+        debug_mode++;
+    }
+
+    else
+    {
+        for (int i = 0; i < 512; i += 2)
+        {
+            setValue(0x0401 + i, debug_holder[i]);
+            setValue(0x0402 + i, debug_holder[i + 1]);
+        }
+
+        graphic_rom[0x0FFF] = debug_holder[512];
+        graphic_rom[0x1006] = debug_holder[513];
+        graphic_rom[0x103E] = debug_holder[514];
+        graphic_rom[0x1037] = debug_holder[515];
+        debug_mode = 0;
+    }
+}
 
 void if_window_resized(GLFWwindow* window, int width, int height)
 {
@@ -56,7 +103,7 @@ void draw_background()
         {
             for (int j = 0; j < 8; j++)
             {
-                int tile_count = (tile_counter - 0x0483)/2; //+2 because the counter already incremented
+                int tile_count = (tile_counter - 0x0403)/2; //+2 because the counter already incremented
                 colour = getValue(rom_address); //get the colour of the pixel at the rom address
                 rom_address++;
 
@@ -69,6 +116,12 @@ void draw_background()
 
                 x += (float)scroll_offset_x * size; //smooth scrolling offset
                 y += (float)scroll_offset_y * size; //smooth scrolling offset
+
+                /*if (colour != 0x00)
+                {
+                    printf("%f, %f, %x, \n", x, y, colour);
+                    getch();
+                }*/
 
                 //printf("offset: %d number put into x: %f x after: %f\n\n", scroll_offset_x, (float)scroll_offset_x / 32.0f, x);
 
@@ -116,13 +169,13 @@ void draw_foreground()
 {
     int gridSize = 128;
     float size = 2.0f / gridSize;
-    uint16_t tile_counter = 0x0601;
+    uint16_t tile_counter = 0x0602;
     uint16_t rom_address = 0x0000;
     uint8_t colour = 0x00;
     int8_t scroll_offset_x;
     int8_t scroll_offset_y;
 
-    while (tile_counter < 0x07FD)
+    while (tile_counter < 0x07FE)
     {
         scroll_offset_x = getValue(tile_counter);
         tile_counter++;
@@ -186,6 +239,14 @@ void GetKeys()
     if (glfwGetKey(window, GLFW_KEY_F2))
     {
         WriteToCart();
+    }
+    if (glfwGetKey(window, GLFW_KEY_F3))
+    {
+        CPU_reset();
+    }
+    if (glfwGetKey(window, GLFW_KEY_F5))
+    {
+        debug_background();
     }
 
     //keyboard keys
@@ -1005,14 +1066,6 @@ void GetKeys()
 void GPUtick() {
     glClear(GL_COLOR_BUFFER_BIT);
     //drawGrid();
-    /*TEST*/
-    for (int i = 0; i < 512; i+=2)
-    {
-        setValue(0x0401 + i, 0x8F);
-        setValue(0x0402 + i, 0xFF);
-    }
-    //setValue(0x0799, 0x40);
-    /*END TEST*/
     draw_background();
     draw_foreground();
     glfwSwapBuffers(window);
