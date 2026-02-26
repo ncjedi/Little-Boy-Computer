@@ -1045,7 +1045,7 @@ int BEQ()
 //sets flags based on value (if bit 7 then negative is set, if bit 6 then overflow is set, if the result of value & acc is zero then zero is set)
 int BIT_IM()
 {
-	if (getValue(program_counter) & 10000000)
+	if (getValue(program_counter) & 0b10000000)
 	{
 		flags |= 0b00001000; //negative
 	}
@@ -1054,7 +1054,7 @@ int BIT_IM()
 		flags &= 0b11110111; //negative
 	}
 
-	if (getValue(program_counter) & 01000000)
+	if (getValue(program_counter) & 0b01000000)
 	{
 		flags |= 0b00000100; //overflow
 	}
@@ -1078,9 +1078,9 @@ int BIT_IM()
 
 int BIT_AB()
 {
-	getAddress();
+	getAddress();	
 
-	if (getValue(address) & 10000000)
+	if (getValue(address) & 0b10000000)
 	{
 		flags |= 0b00001000; //negative
 	}
@@ -1089,7 +1089,7 @@ int BIT_AB()
 		flags &= 0b11110111; //negative
 	}
 
-	if (getValue(address) & 01000000)
+	if (getValue(address) & 0b01000000)
 	{
 		flags |= 0b00000100; //overflow
 	}
