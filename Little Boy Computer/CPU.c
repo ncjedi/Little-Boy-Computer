@@ -428,6 +428,7 @@ void CPU_reset()
 	program_counter = 0x1001; //location the CPU is currently looking at in memory.
 	stack_counter = 0x00; //current location on the stack
 	wait = 0; //how long to wait after certain actions to make the CPU not do multiple actions at once
+	cpu_stage = 0;
 }
 
 void CPU_clock()

@@ -1069,8 +1069,11 @@ void GetKeys()
 
 void GPUtick() {
     int last_cpu_stage = 0;
+    int get_cpu_stage = 0;
     while (1)
     {
+        get_cpu_stage = cpu_stage;//done this way to prevent crashes
+
         if (cpu_stage != last_cpu_stage)
         {
             last_cpu_stage = cpu_stage;
