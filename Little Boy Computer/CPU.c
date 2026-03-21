@@ -481,7 +481,7 @@ int ADC_IM()
 		flags &= 0b11111110; //carry
 	}
 
-	if (result == 0x00)
+	if ((uint8_t)result == 0x00)
 	{
 		flags |= 0b00000010; //zero
 	}
@@ -528,7 +528,7 @@ int ADC_AB()
 		flags &= 0b11111110; //carry
 	}
 
-	if (result == 0x00)
+	if ((uint8_t)result == 0x00)
 	{
 		flags |= 0b00000010; //zero
 	}
@@ -574,7 +574,7 @@ int ADC_ABX()
 		flags &= 0b11111110; //carry
 	}
 
-	if (result == 0x00)
+	if ((uint8_t)result == 0x00)
 	{
 		flags |= 0b00000010; //zero
 	}
@@ -620,7 +620,7 @@ int ADC_ABY()
 		flags &= 0b11111110; //carry
 	}
 
-	if (result == 0x00)
+	if ((uint8_t)result == 0x00)
 	{
 		flags |= 0b00000010; //zero
 	}
@@ -666,7 +666,7 @@ int ADC_INDX()
 		flags &= 0b11111110; //carry
 	}
 
-	if (result == 0x00)
+	if ((uint8_t)result == 0x00)
 	{
 		flags |= 0b00000010; //zero
 	}
@@ -712,7 +712,7 @@ int ADC_INDY()
 		flags &= 0b11111110; //carry
 	}
 
-	if (result == 0x00)
+	if ((uint8_t)result == 0x00)
 	{
 		flags |= 0b00000010; //zero
 	}
