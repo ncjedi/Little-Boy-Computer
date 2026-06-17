@@ -2,6 +2,7 @@
 #include "Windows.h"
 #include "CPU.h"
 #include <stdio.h>
+#include <time.h>
 
 uint8_t input_file_data[0x03F8];
 uint8_t output_file_data[0x03F8];
@@ -216,9 +217,12 @@ int UpdateIO(void* data)
 int PlaySpeaker(void* data)
 {
 	int last_cpu_stage = cpu_stage;
+
 	while (1)
 	{
 		last_cpu_stage = cpu_stage;
+
+		printf(""); //this needs to be here or the thread stops working
 
 		if (getValue(0x080d) > 0 && getValue(0x080d) < 108 && getValue(0x080e) > 0 && cpu_stage != last_cpu_stage)
 		{
