@@ -2,6 +2,7 @@
 #include "Windows.h"
 #include "CPU.h"
 #include <stdio.h>
+#include <time.h>
 
 uint8_t input_file_data[0x03F8];
 uint8_t output_file_data[0x03F8];
@@ -162,51 +163,66 @@ void IOFilesInit()
 	}
 }
 
-void UpdateIO()
+int UpdateIO(void* data)
 {
 	FILE* input_file = NULL;
 	FILE* output_file = NULL;
 	errno_t err;
+	int last_cpu_stage = 0;
+	int get_cpu_stage = 0;
 
-	//read input file
-	err = fopen_s(&input_file, "./IO/lbc_input.txt", "rb");
-	if (!err)
+	while (1)
 	{
-		fread(input_file_data, sizeof(uint8_t), 0x03F8, input_file);
-		fclose(input_file);
-	}
-	else
-	{
-		printf("IO input file error: %d", err);
-	}
-	for (int i = 0; i < sizeof(input_file_data); i++)
-	{
-		IO_address[i + 0x000d] = input_file_data[i];
-	}
+		get_cpu_stage = cpu_stage;//done this way to prevent crashes
 
-	//initialize output file
-	for (int i = 0; i < sizeof(output_file_data); i++)
-	{
-		output_file_data[i] = IO_address[i+sizeof(input_file_data)+0x000d];
-	}
-	err = fopen_s(&output_file, "./IO/lbc_output.txt", "wb");
-	if (!err)
-	{
-		fwrite(output_file_data, sizeof(uint8_t), 0x03F8, output_file);
-		fclose(output_file);
-	}
-	else
-	{
-		printf("IO output file error: %d", err);
+		if (cpu_stage != last_cpu_stage)
+		{
+			last_cpu_stage = cpu_stage;
+
+			//read input file
+			err = fopen_s(&input_file, "./IO/lbc_input.txt", "rb");
+			if (!err)
+			{
+				fread(input_file_data, sizeof(uint8_t), 0x03F8, input_file);
+				fclose(input_file);
+			}
+			else
+			{
+				printf("IO input file error: %d", err);
+			}
+			for (int i = 0; i < sizeof(input_file_data); i++)
+			{
+				IO_address[i + 0x000d] = input_file_data[i];
+			}
+
+			//initialize output file
+			for (int i = 0; i < sizeof(output_file_data); i++)
+			{
+				output_file_data[i] = IO_address[i + sizeof(input_file_data) + 0x000d];
+			}
+			err = fopen_s(&output_file, "./IO/lbc_output.txt", "wb");
+			if (!err)
+			{
+				fwrite(output_file_data, sizeof(uint8_t), 0x03F8, output_file);
+				fclose(output_file);
+			}
+			else
+			{
+				printf("IO output file error: %d", err);
+			}
+		}
 	}
 }
 
 int PlaySpeaker(void* data)
 {
 	int last_cpu_stage = cpu_stage;
+
 	while (1)
 	{
 		last_cpu_stage = cpu_stage;
+
+		printf(""); //this needs to be here or the thread stops working
 
 		if (getValue(0x080d) > 0 && getValue(0x080d) < 108 && getValue(0x080e) > 0 && cpu_stage != last_cpu_stage)
 		{

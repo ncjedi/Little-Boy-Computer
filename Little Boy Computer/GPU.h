@@ -1,4 +1,4 @@
 #pragma once
 
 void GPUtick();
-void GPUinit();
+int GPUinit(void* data);

@@ -19,6 +19,7 @@ int cpu_stage = 0;
 int key_pressed;
 int fa_key; //the second value in the buffer for function and arrow keys
 int wait = 0; //how long to wait after certain actions to make the CPU not do multiple actions at once
+int cpu_pause = 0; //pause the cpu thread
 
 void run_opcode()
 {
@@ -426,8 +427,8 @@ void CPU_reset()
 	address = 0x0000; //address taken from input in memory
 	program_counter = 0x1001; //location the CPU is currently looking at in memory.
 	stack_counter = 0x00; //current location on the stack
-	cpu_stage = 0;
 	wait = 0; //how long to wait after certain actions to make the CPU not do multiple actions at once
+	cpu_stage = 0;
 }
 
 void CPU_clock()
@@ -438,12 +439,9 @@ void CPU_clock()
 	while (1)
 	{
 		float elapsed_time = ((float)end_time - (float)start_time) / CLOCKS_PER_SEC;
-		if (elapsed_time >= 0.000001)
+		if (elapsed_time >= 0.000001 && !cpu_pause)
 		{
 			start_time = clock();
-
-			UpdateIO();
-			GPUtick();
 
 			if (!wait)
 			{
@@ -483,7 +481,7 @@ int ADC_IM()
 		flags &= 0b11111110; //carry
 	}
 
-	if (result == 0x00)
+	if ((uint8_t)result == 0x00)
 	{
 		flags |= 0b00000010; //zero
 	}
@@ -530,7 +528,7 @@ int ADC_AB()
 		flags &= 0b11111110; //carry
 	}
 
-	if (result == 0x00)
+	if ((uint8_t)result == 0x00)
 	{
 		flags |= 0b00000010; //zero
 	}
@@ -576,7 +574,7 @@ int ADC_ABX()
 		flags &= 0b11111110; //carry
 	}
 
-	if (result == 0x00)
+	if ((uint8_t)result == 0x00)
 	{
 		flags |= 0b00000010; //zero
 	}
@@ -622,7 +620,7 @@ int ADC_ABY()
 		flags &= 0b11111110; //carry
 	}
 
-	if (result == 0x00)
+	if ((uint8_t)result == 0x00)
 	{
 		flags |= 0b00000010; //zero
 	}
@@ -668,7 +666,7 @@ int ADC_INDX()
 		flags &= 0b11111110; //carry
 	}
 
-	if (result == 0x00)
+	if ((uint8_t)result == 0x00)
 	{
 		flags |= 0b00000010; //zero
 	}
@@ -714,7 +712,7 @@ int ADC_INDY()
 		flags &= 0b11111110; //carry
 	}
 
-	if (result == 0x00)
+	if ((uint8_t)result == 0x00)
 	{
 		flags |= 0b00000010; //zero
 	}
@@ -1048,7 +1046,7 @@ int BEQ()
 //sets flags based on value (if bit 7 then negative is set, if bit 6 then overflow is set, if the result of value & acc is zero then zero is set)
 int BIT_IM()
 {
-	if (getValue(program_counter) & 10000000)
+	if (getValue(program_counter) & 0b10000000)
 	{
 		flags |= 0b00001000; //negative
 	}
@@ -1057,7 +1055,7 @@ int BIT_IM()
 		flags &= 0b11110111; //negative
 	}
 
-	if (getValue(program_counter) & 01000000)
+	if (getValue(program_counter) & 0b01000000)
 	{
 		flags |= 0b00000100; //overflow
 	}
@@ -1081,9 +1079,9 @@ int BIT_IM()
 
 int BIT_AB()
 {
-	getAddress();
+	getAddress();	
 
-	if (getValue(address) & 10000000)
+	if (getValue(address) & 0b10000000)
 	{
 		flags |= 0b00001000; //negative
 	}
@@ -1092,7 +1090,7 @@ int BIT_AB()
 		flags &= 0b11110111; //negative
 	}
 
-	if (getValue(address) & 01000000)
+	if (getValue(address) & 0b01000000)
 	{
 		flags |= 0b00000100; //overflow
 	}
