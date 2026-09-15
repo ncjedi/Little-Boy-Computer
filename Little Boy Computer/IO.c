@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include "IO.h"
 #include "Windows.h"
 #include "CPU.h"
@@ -174,42 +176,33 @@ int UpdateIO(void* data)
 	while (1)
 	{
 		get_cpu_stage = cpu_stage;//done this way to prevent crashes
+		printf("");
 
 		if (cpu_stage != last_cpu_stage)
 		{
 			last_cpu_stage = cpu_stage;
 
 			//read input file
-			err = fopen_s(&input_file, "./IO/lbc_input.txt", "rb");
-			if (!err)
-			{
-				fread(input_file_data, sizeof(uint8_t), 0x03F8, input_file);
-				fclose(input_file);
-			}
-			else
-			{
-				printf("IO input file error: %d", err);
-			}
+			input_file = fopen("./IO/lbc_input.txt", "rb");
+			fread(input_file_data, sizeof(uint8_t), 0x03F8, input_file);
+			fclose(input_file);
+
+			//copy into addresses
 			for (int i = 0; i < sizeof(input_file_data); i++)
 			{
 				IO_address[i + 0x000d] = input_file_data[i];
 			}
 
-			//initialize output file
+			//copy addresses to output file
 			for (int i = 0; i < sizeof(output_file_data); i++)
 			{
 				output_file_data[i] = IO_address[i + sizeof(input_file_data) + 0x000d];
 			}
-			err = fopen_s(&output_file, "./IO/lbc_output.txt", "wb");
-			if (!err)
-			{
-				fwrite(output_file_data, sizeof(uint8_t), 0x03F8, output_file);
-				fclose(output_file);
-			}
-			else
-			{
-				printf("IO output file error: %d", err);
-			}
+
+			//write to output file
+			output_file = fopen("./IO/lbc_output.txt", "wb");
+			fwrite(output_file_data, sizeof(uint8_t), 0x03F8, output_file);
+			fclose(output_file);
 		}
 	}
 }

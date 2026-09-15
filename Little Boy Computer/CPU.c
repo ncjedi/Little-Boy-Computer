@@ -397,6 +397,7 @@ void getAddressIndX()
 
 void getAddressIndY()
 {
+	printf("value before: %04X ", getValue(0x0000));
 	address = 0x0000;
 	address |= getValue(getValue(program_counter));
 	address = address << 8;
@@ -3100,6 +3101,12 @@ int STA_INDY()
 {
 	getAddressIndY();
 	setValue(address + reg_y, accumulator);
+
+	if ((address + reg_y) == 0x0000)
+	{
+		printf("hi");
+	}
+
 	return 4;
 }
 
