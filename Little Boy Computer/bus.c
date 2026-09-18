@@ -4,6 +4,7 @@
 #include "VRAM.h"
 #include "Cart.h"
 #include "IO.h"
+#include "CPU.h"
 
 uint16_t RAMoffset = 0x0000;
 uint16_t back_ramOffset = 0x0401;
@@ -14,9 +15,13 @@ uint16_t graphic_romOffset = 0x8000;
 
 uint8_t getValue(uint16_t address)
 {
-	if (address <= 0x0400)
+	if (address <= 0x03FF)
 	{
 		return RAM[address - RAMoffset]; /*RAM addresses*/
+	}
+	else if (address == 0x0400)
+	{
+		return bank_switch;
 	}
 	else if (address <= 0x0600)
 	{
@@ -47,9 +52,14 @@ uint8_t getValue(uint16_t address)
 
 void setValue(uint16_t address, uint8_t value)
 {
-	if (address <= 0x0400)
+	if (address <= 0x03FF)
 	{
 		RAM[address - RAMoffset] = value; /*write to RAM*/
+	}
+	else if (address == 0x0400)
+	{
+		bank_switch = value;
+		bankSwitch();
 	}
 	else if (address <= 0x0600)
 	{
@@ -58,6 +68,8 @@ void setValue(uint16_t address, uint8_t value)
 	else if (address == 0x0601)
 	{
 		GPU_interrupt = value; /*GPU interrupt*/
+		visual_blast_transfer(); /*quick transfer of addresses from ROM to VRAM*/
+		GPU_interrupt = 0x00; /*allow the GPU to continue*/
 	}
 	else if (address <= 0x0801)
 	{

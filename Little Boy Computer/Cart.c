@@ -2,6 +2,7 @@
 #include <tchar.h>
 #include "Cart.h"
 #include "Windows.h"
+#include "bus.h"
 
 uint8_t fullFile[0xEFFE];
 TCHAR szFile[260] = { 0 };
@@ -27,13 +28,14 @@ void WriteToCart()
 {
     FILE* cart;
 
-    errno_t err = _tfopen_s(&cart, szFile, L"wb");
+    errno_t err = _tfopen_s(&cart, szFile, L"rb+");
     if (err)
     {
         _tprintf(_T("szFile is: %s"), szFile);
     }
     else if (cart)
     {
+        fseek(cart, getValue(0x0400) * 0xEFFE, SEEK_SET);
         RecompileFullFile();
         fwrite(fullFile, sizeof(uint8_t), 0xEFFE, cart);
         fclose(cart);
@@ -57,12 +59,42 @@ void splitFullFile()
     }
 }
 
+void bankSwitch()
+{
+    FILE* cart;
+    int num_read = 0;
+
+    errno_t err = _tfopen_s(&cart, szFile, L"rb");
+    if (err)
+    {
+        _tprintf(_T("szFile is: %s"), szFile);
+    }
+    else if (cart)
+    {
+        fseek(cart, 0xEFFE * getValue(0x0400), SEEK_SET);
+        num_read = fread(fullFile, sizeof(uint8_t), 0xEFFE, cart);
+
+        if (num_read < 0xEFFE)
+        {
+            for (int i = num_read; i < 0xEFFE; i++)
+            {
+                fullFile[i] = 0x00;
+            }
+        }
+
+        fclose(cart);
+        splitFullFile();
+    }
+    printf("%X, %X",num_read, 0xEFFE * getValue(0x0400));
+}
+
 void readCart()
 {
     OPENFILENAME ofn;
     char* fileName;
     HWND hwnd = NULL;
     FILE *cart;
+    int num_read = 0;
 
     ZeroMemory(&ofn, sizeof(ofn));
     ofn.lStructSize = sizeof(ofn);
@@ -88,7 +120,17 @@ void readCart()
         }
         else if(cart)
         {
-            fread(fullFile, sizeof(uint8_t), 0xEFFE, cart);
+            fseek(cart, 0xEFFE * getValue(0x0400), SEEK_SET);
+            num_read = fread(fullFile, sizeof(uint8_t), 0xEFFE, cart);
+
+            if(num_read < 0xEFFE)
+            {
+                for (int i = num_read; i < 0xEFFE; i++)
+                {
+                    fullFile[i] = 0x00;
+                }
+            }
+
             fclose(cart);
             splitFullFile();
         }
