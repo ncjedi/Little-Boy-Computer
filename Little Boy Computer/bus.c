@@ -18,9 +18,13 @@ uint8_t getValue(uint16_t address)
 	{
 		return RAM[address - RAMoffset]; /*RAM addresses*/
 	}
-	else if (address <= 0x0601)
+	else if (address <= 0x0600)
 	{
 		return back_ram[address - back_ramOffset]; /*VRAM back addresses also if you want to read from it for some reason!*/
+	}
+	else if (address == 0x0601)
+	{
+		return GPU_interrupt; /*GPU interrupt. incase. you need to know if the screen is being written to.*/
 	}
 	else if (address <= 0x0801)
 	{
@@ -47,9 +51,13 @@ void setValue(uint16_t address, uint8_t value)
 	{
 		RAM[address - RAMoffset] = value; /*write to RAM*/
 	}
-	else if (address <= 0x0601)
+	else if (address <= 0x0600)
 	{
 		back_ram[address - back_ramOffset] = value; /*VRAM back addresses*/
+	}
+	else if (address == 0x0601)
+	{
+		GPU_interrupt = value; /*GPU interrupt*/
 	}
 	else if (address <= 0x0801)
 	{

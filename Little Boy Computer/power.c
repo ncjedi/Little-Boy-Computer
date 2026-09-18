@@ -3,6 +3,7 @@
 #include "Cart.h"
 #include "bus.h"
 #include "IO.h"
+#include "VRAM.h"
 #include <threads.h>
 #include <stdio.h>
 
