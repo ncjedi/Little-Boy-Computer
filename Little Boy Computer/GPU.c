@@ -1083,7 +1083,7 @@ void GPUtick() {
             start_time = clock();
             get_cpu_stage = cpu_stage;//done this way to prevent crashes
 
-            if (cpu_stage != last_cpu_stage)
+            if (cpu_stage != last_cpu_stage && getValue(0x0601) == 0x00)
             {
                 last_cpu_stage = cpu_stage;
                 //printf("GPU!");
@@ -1092,9 +1092,9 @@ void GPUtick() {
                 draw_background();
                 draw_foreground();
                 glfwSwapBuffers(window);
-                glfwPollEvents();
-                GetKeys();
             }
+            glfwPollEvents();
+            GetKeys();
         }
         end_time = clock();
     }

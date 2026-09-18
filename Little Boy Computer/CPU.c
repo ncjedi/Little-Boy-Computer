@@ -397,7 +397,6 @@ void getAddressIndX()
 
 void getAddressIndY()
 {
-	printf("value before: %04X ", getValue(0x0000));
 	address = 0x0000;
 	address |= getValue(getValue(program_counter));
 	address = address << 8;
@@ -1527,7 +1526,7 @@ int CPY_AB()
 }
 
 //Decrements address's value
-DEC_AB()
+int DEC_AB()
 {
 	getAddress();
 
@@ -1554,7 +1553,7 @@ DEC_AB()
 	return 5;
 }
 
-DEC_ABX()
+int DEC_ABX()
 {
 	getAddress();
 
@@ -1582,7 +1581,7 @@ DEC_ABX()
 }
 
 //Decrements the X register
-DEX()
+int DEX()
 {
 	reg_x -= 1;
 
@@ -1608,7 +1607,7 @@ DEX()
 }
 
 //Decrements the Y register
-DEY()
+int DEY()
 {
 	reg_y -= 1;
 
@@ -1634,7 +1633,7 @@ DEY()
 }
 
 //Exclusive or
-EOR_IM()
+int EOR_IM()
 {
 	accumulator = accumulator ^ getValue(program_counter);
 
@@ -1660,7 +1659,7 @@ EOR_IM()
 	return 1;
 }
 
-EOR_AB()
+int EOR_AB()
 {
 	getAddress();
 	accumulator = accumulator ^ getValue(address);
@@ -1686,7 +1685,7 @@ EOR_AB()
 	return 1;
 }
 
-EOR_ABX()
+int EOR_ABX()
 {
 	getAddress();
 	accumulator = accumulator ^ getValue(address + reg_x);
@@ -1712,7 +1711,7 @@ EOR_ABX()
 	return 1;
 }
 
-EOR_ABY()
+int EOR_ABY()
 {
 	getAddress();
 	accumulator = accumulator ^ getValue(address + reg_y);
@@ -1738,7 +1737,7 @@ EOR_ABY()
 	return 1;
 }
 
-EOR_INDX()
+int EOR_INDX()
 {
 	getAddressIndX();
 	accumulator = accumulator ^ getValue(address);
@@ -1764,7 +1763,7 @@ EOR_INDX()
 	return 1;
 }
 
-EOR_INDY()
+int EOR_INDY()
 {
 	getAddressIndY();
 	accumulator = accumulator ^ getValue(address + reg_y);
@@ -1791,7 +1790,7 @@ EOR_INDY()
 }
 
 //Increments address's value
-INC_AB()
+int INC_AB()
 {
 	getAddress();
 
@@ -1818,7 +1817,7 @@ INC_AB()
 	return 5;
 }
 
-INC_ABX()
+int INC_ABX()
 {
 	getAddress();
 
@@ -1846,7 +1845,7 @@ INC_ABX()
 }
 
 //Increments the X register
-INX()
+int INX()
 {
 	reg_x += 1;
 
@@ -1872,7 +1871,7 @@ INX()
 }
 
 //Increments the Y register
-INY()
+int INY()
 {
 	reg_y += 1;
 
@@ -1898,7 +1897,7 @@ INY()
 }
 
 //jump to address
-JMP_AB()
+int JMP_AB()
 {
 	getAddress();
 
@@ -1907,7 +1906,7 @@ JMP_AB()
 	return 2;
 }
 
-JMP_IN()
+int JMP_IN()
 {
 	getAddress();
 
@@ -1921,7 +1920,7 @@ JMP_IN()
 }
 
 //Jump to subroutine
-JSR()
+int JSR()
 {
 	getAddress();
 
@@ -1934,7 +1933,7 @@ JSR()
 }
 
 //Load into accumulator
-LDA_IM()
+int LDA_IM()
 {
 	accumulator = getValue(program_counter);
 
@@ -1961,7 +1960,7 @@ LDA_IM()
 	return 1;
 }
 
-LDA_AB()
+int LDA_AB()
 {
 	getAddress();
 	accumulator = getValue(address);
@@ -1987,7 +1986,7 @@ LDA_AB()
 	return 3;
 }
 
-LDA_ABX()
+int LDA_ABX()
 {
 	getAddress();
 	accumulator = getValue(address + reg_x);
@@ -2013,7 +2012,7 @@ LDA_ABX()
 	return 3;
 }
 
-LDA_ABY()
+int LDA_ABY()
 {
 	getAddress();
 	accumulator = getValue(address + reg_y);
@@ -2039,7 +2038,7 @@ LDA_ABY()
 	return 3;
 }
 
-LDA_INDX()
+int LDA_INDX()
 {
 	getAddressIndX();
 	accumulator = getValue(address);
@@ -2065,7 +2064,7 @@ LDA_INDX()
 	return 5;
 }
 
-LDA_INDY()
+int LDA_INDY()
 {
 	getAddressIndY();
 	accumulator = getValue(address + reg_y);
@@ -2092,7 +2091,7 @@ LDA_INDY()
 }
 
 //Load into reg_x
-LDX_IM()
+int LDX_IM()
 {
 	reg_x = getValue(program_counter);
 
@@ -2119,7 +2118,7 @@ LDX_IM()
 	return 1;
 }
 
-LDX_AB()
+int LDX_AB()
 {
 	getAddress();
 	reg_x = getValue(address);
@@ -2145,7 +2144,7 @@ LDX_AB()
 	return 3;
 }
 
-LDX_ABY()
+int LDX_ABY()
 {
 	getAddress();
 	reg_x = getValue(address + reg_y);
@@ -2172,7 +2171,7 @@ LDX_ABY()
 }
 
 //Load into reg_y
-LDY_IM()
+int LDY_IM()
 {
 	reg_y = getValue(program_counter);
 
@@ -2199,7 +2198,7 @@ LDY_IM()
 	return 1;
 }
 
-LDY_AB()
+int LDY_AB()
 {
 	getAddress();
 	reg_y = getValue(address);
@@ -2225,7 +2224,7 @@ LDY_AB()
 	return 3;
 }
 
-LDY_ABX()
+int LDY_ABX()
 {
 	getAddress();
 	reg_y = getValue(address + reg_x);
@@ -3101,11 +3100,6 @@ int STA_INDY()
 {
 	getAddressIndY();
 	setValue(address + reg_y, accumulator);
-
-	if ((address + reg_y) == 0x0000)
-	{
-		printf("hi");
-	}
 
 	return 4;
 }
