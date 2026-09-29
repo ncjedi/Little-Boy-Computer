@@ -20,6 +20,77 @@ int key_pressed;
 int fa_key; //the second value in the buffer for function and arrow keys
 int wait = 0; //how long to wait after certain actions to make the CPU not do multiple actions at once
 int cpu_pause = 0; //pause the cpu thread
+int cpu_speed_check = 0;
+
+void visual_blast_transfer()
+{
+	uint16_t vram_address = 0x0000;
+	uint16_t rom_address = 0x0000;
+	uint8_t offset = getValue(0x0601);
+	clock_t start_time = clock();
+	clock_t end_time = clock();
+	uint16_t i = 0x0000;
+	//int foreground = 0;
+
+	if (offset < 0x80)
+	{
+		vram_address = 0x0401;
+		rom_address = offset * 0x0200;
+	}
+	else
+	{
+		vram_address = 0x0602;
+		offset -= 0x80;
+		rom_address = offset * 0x0200;
+		//foreground = 1;
+		//i = 2;
+	}
+
+	while (i < 0x0200)
+	{
+		//int second = 0; //second pass through foreground sprite bytes
+		float elapsed_time = ((float)end_time - (float)start_time) / CLOCKS_PER_SEC;
+		if (elapsed_time >= 0.000001 && !cpu_pause)
+		{
+			start_time = clock();
+
+			setValue(vram_address + i, getValue(rom_address + i));
+
+			cpu_stage++;
+			if (cpu_stage > 100)
+			{
+				cpu_stage = 0;
+			}
+
+			i++;
+			/*if (foreground)
+			{
+				if (second)
+				{
+					i += 2;
+					second = 0;
+				}
+				else
+				{
+					second = 1;
+				}
+			}*/
+
+			/*if (cpu_speed_check == 0)
+			{
+				printf("CPU can't keep up!");
+			}
+			cpu_speed_check = 0;*/
+		}
+		/*else
+		{
+			cpu_speed_check = 1;
+		}*/
+		end_time = clock();
+	}
+
+	cpu_speed_check = 1;
+}
 
 void run_opcode()
 {
@@ -457,7 +528,17 @@ void CPU_clock()
 			{
 				cpu_stage = 0;
 			}
+
+			/*if (cpu_speed_check == 0)
+			{
+				printf("CPU can't keep up!");
+			}
+			cpu_speed_check = 0;*/
 		}
+		/*else
+		{
+			cpu_speed_check = 1;
+		}*/
 		/*else
 		{
 			printf("hi");

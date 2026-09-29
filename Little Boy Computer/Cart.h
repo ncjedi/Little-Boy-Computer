@@ -7,3 +7,4 @@ uint8_t graphic_rom[0x7FFF]; //graphic memory
 
 void readCart();
 void WriteToCart();
+void bankSwitch();
