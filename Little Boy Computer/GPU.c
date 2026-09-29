@@ -90,6 +90,8 @@ void draw_background()
     uint8_t colour = 0x00;
     int8_t scroll_offset_x = getValue(0x0800);
     int8_t scroll_offset_y = getValue(0x0801);
+    clock_t start_time = clock();
+    clock_t end_time = clock();
 
     while (tile_counter < 0x0601)
     {
@@ -99,12 +101,24 @@ void draw_background()
         rom_address = rom_address << 8; //shift the high bit to it's position
         rom_address |= getValue(tile_counter); // get the low bit from the VRAM
         tile_counter++; //increment the tile counter for the next pass
+        int tile_count = (tile_counter - 0x0403) / 2; //+2 because the counter already incremented
+
+        if ((tile_count + 1) % 16 == 0 && tile_count != 0)
+        {
+            start_time = clock();
+            while (((float)end_time - (float)start_time) / CLOCKS_PER_SEC < 0.00006355)
+            {
+                end_time = clock();
+            }
+        }
+
+        scroll_offset_x = getValue(0x0800);
+        scroll_offset_y = getValue(0x0801);
 
         for (int i = 0; i < 8; i++)
         {
             for (int j = 0; j < 8; j++)
             {
-                int tile_count = (tile_counter - 0x0403)/2; //+2 because the counter already incremented
                 colour = getValue(rom_address); //get the colour of the pixel at the rom address
                 rom_address++;
 
