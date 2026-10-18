@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <conio.h>
+#include <windows.h>
 #include "CPU.h"
 #include "bus.h"
 #include "GPU.h"
@@ -27,10 +28,16 @@ void visual_blast_transfer()
 	uint16_t vram_address = 0x0000;
 	uint16_t rom_address = 0x0000;
 	uint8_t offset = getValue(0x0601);
-	clock_t start_time = clock();
-	clock_t end_time = clock();
+	double elapsed_time;
+	LARGE_INTEGER time_frequency;
+	LARGE_INTEGER start_time;
+	LARGE_INTEGER end_time;
 	uint16_t i = 0x0000;
 	//int foreground = 0;
+
+	QueryPerformanceFrequency(&time_frequency);
+	QueryPerformanceCounter(&start_time);
+	QueryPerformanceCounter(&end_time);
 
 	if (offset < 0x80)
 	{
@@ -49,10 +56,10 @@ void visual_blast_transfer()
 	while (i < 0x0200)
 	{
 		//int second = 0; //second pass through foreground sprite bytes
-		float elapsed_time = ((float)end_time - (float)start_time) / CLOCKS_PER_SEC;
-		if (elapsed_time >= 0.000001 && !cpu_pause)
+		elapsed_time = (end_time.QuadPart - start_time.QuadPart) * 1000000.0 / time_frequency.QuadPart;
+		if (elapsed_time >= 1.0 && !cpu_pause)
 		{
-			start_time = clock();
+			QueryPerformanceCounter(&start_time);
 
 			setValue(vram_address + i, getValue(rom_address + i));
 
@@ -86,7 +93,7 @@ void visual_blast_transfer()
 		{
 			cpu_speed_check = 1;
 		}*/
-		end_time = clock();
+		QueryPerformanceCounter(&end_time);
 	}
 
 	cpu_speed_check = 1;
@@ -96,6 +103,7 @@ void run_opcode()
 {
 	uint8_t opcode = getValue(program_counter);
 	program_counter++;
+	//printf("%02X\n", opcode);
 
 	switch (opcode)
 	{
@@ -504,15 +512,26 @@ void CPU_reset()
 
 void CPU_clock()
 {
-	clock_t start_time = clock();
-	clock_t end_time = clock();
+	long int cycles_test = 0;
+	double elapsed_time;
+	//double elapsed_time_second_test;
+	LARGE_INTEGER time_frequency;
+	LARGE_INTEGER start_time;
+	LARGE_INTEGER end_time;
+	//LARGE_INTEGER start_time_second_test;
+	//LARGE_INTEGER end_time_second_test;
+	QueryPerformanceFrequency(&time_frequency);
+	QueryPerformanceCounter(&start_time);
+	QueryPerformanceCounter(&end_time);
+	//QueryPerformanceCounter(&start_time_second_test);
+	//QueryPerformanceCounter(&end_time_second_test);
 
 	while (1)
 	{
-		float elapsed_time = ((float)end_time - (float)start_time) / CLOCKS_PER_SEC;
-		if (elapsed_time >= 0.000001 && !cpu_pause)
+		elapsed_time = (end_time.QuadPart - start_time.QuadPart) * 1000000.0/time_frequency.QuadPart;
+		if (elapsed_time >= 1.0 && !cpu_pause)
 		{
-			start_time = clock();
+			QueryPerformanceCounter(&start_time);
 
 			if (!wait)
 			{
@@ -534,6 +553,18 @@ void CPU_clock()
 				printf("CPU can't keep up!");
 			}
 			cpu_speed_check = 0;*/
+
+			/*cycles_test++;
+
+			elapsed_time_second_test = (end_time_second_test.QuadPart - start_time_second_test.QuadPart) / time_frequency.QuadPart;
+
+			if (elapsed_time_second_test >= 1.0)
+			{
+				QueryPerformanceCounter(&start_time_second_test);
+				printf("cycles: %ld\nstart_time(test): %lld\nend_time(test): %lld\nfrequency: %lld\n",cycles_test,start_time_second_test,end_time_second_test,time_frequency);
+				cycles_test = 0;
+			}
+			QueryPerformanceCounter(&end_time_second_test);*/
 		}
 		/*else
 		{
@@ -543,7 +574,7 @@ void CPU_clock()
 		{
 			printf("hi");
 		}*/
-		end_time = clock();
+		QueryPerformanceCounter(&end_time);
 	}
 }
 
