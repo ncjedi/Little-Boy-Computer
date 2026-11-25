@@ -1,6 +1,7 @@
 #include <GLFW/glfw3.h>
 #include <stdio.h>
 #include <time.h>
+#include <windows.h>
 #include "bus.h"
 #include "Cart.h"
 #include "IO.h"
@@ -112,6 +113,7 @@ void draw_background()
             {
                 end_time = clock();
             }
+            //printf("SET! %02X\n", getValue(0x0601));
             scanline++;
         }
 
@@ -181,6 +183,7 @@ void draw_background()
             }
         }
     }
+    setScanline(0xff);
 }
 
 void draw_foreground()
@@ -248,7 +251,7 @@ void GetKeys()
     //function keys
     if (glfwGetKey(window, GLFW_KEY_F4))
     {
-        exit();
+        exit(0);
     }
     if (glfwGetKey(window, GLFW_KEY_F1))
     {
@@ -1088,16 +1091,25 @@ void GetKeys()
 void GPUtick() {
     int last_cpu_stage = 0;
     int get_cpu_stage = 0;
+    LARGE_INTEGER time_frequency;
+    LARGE_INTEGER start_time;
+    LARGE_INTEGER end_time;
+    double elapsed_time;
 
-    clock_t start_time = clock();
-    clock_t end_time = clock();
+    //clock_t start_time = clock();
+    //clock_t end_time = clock();
+    QueryPerformanceFrequency(&time_frequency);
+    QueryPerformanceCounter(&start_time);
+    QueryPerformanceCounter(&end_time);
 
     while (1)
     {
-        float elapsed_time = ((float)end_time - (float)start_time) / CLOCKS_PER_SEC;
-        if (elapsed_time >= 0.00833333333)
+        //float elapsed_time = ((float)end_time - (float)start_time) / CLOCKS_PER_SEC;
+        elapsed_time = (end_time.QuadPart - start_time.QuadPart) * 60.0 / time_frequency.QuadPart;
+        if (elapsed_time >= 1 /*0.00833333333*/)
         {
-            start_time = clock();
+            //start_time = clock();
+            QueryPerformanceCounter(&start_time);
             get_cpu_stage = cpu_stage;//done this way to prevent crashes
 
             if (cpu_stage != last_cpu_stage && getGPUInterrupt() == 0x00)
@@ -1113,7 +1125,8 @@ void GPUtick() {
             glfwPollEvents();
             GetKeys();
         }
-        end_time = clock();
+        //end_time = clock();
+        QueryPerformanceCounter(&end_time);
     }
 }
 

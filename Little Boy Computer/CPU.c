@@ -1327,6 +1327,8 @@ int CMP_IM()
 		flags &= 0b11110111; //negative
 	}
 
+	//printf("GET! %02X\n", accumulator);
+
 	program_counter++;
 	return 1;
 }
