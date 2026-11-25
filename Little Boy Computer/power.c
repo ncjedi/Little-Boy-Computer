@@ -6,9 +6,13 @@
 #include "VRAM.h"
 #include <threads.h>
 #include <stdio.h>
+#include <Windows.h>
 
 int main()
 {
+	HWND hWnd = GetConsoleWindow();
+	ShowWindow(hWnd, SW_HIDE);
+
 	thrd_t sound_thread;
 	thrd_t gpu_thread;
 	thrd_t IO_thread;
