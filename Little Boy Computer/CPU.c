@@ -27,7 +27,7 @@ void visual_blast_transfer()
 {
 	uint16_t vram_address = 0x0000;
 	uint16_t rom_address = 0x0000;
-	uint8_t offset = getValue(0x0601);
+	uint8_t offset = getGPUInterrupt();
 	double elapsed_time;
 	LARGE_INTEGER time_frequency;
 	LARGE_INTEGER start_time;

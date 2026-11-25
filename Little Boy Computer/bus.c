@@ -29,11 +29,11 @@ uint8_t getValue(uint16_t address)
 	}
 	else if (address == 0x0601)
 	{
-		return GPU_interrupt; /*GPU interrupt. incase. you need to know if the screen is being written to.*/
+		return current_scanline; /*Scanline counter*/
 	}
 	else if (address <= 0x0801)
 	{
-		return front_ram[address - front_ramOffset]; /*VRAM foreground addresses... if you wanted to read from those for some reason?*/
+		return front_ram[address - front_ramOffset]; /*VRAM foreground addresses*/
 	}
 	else if (address <= 0x1000)
 	{
@@ -88,4 +88,14 @@ void setValue(uint16_t address, uint8_t value)
 		graphic_rom[address - graphic_romOffset] = value; /*read from graphic rom*/
 	}
 	return 0x0000;
+}
+
+void setScanline(uint8_t value)
+{
+	current_scanline = value;
+}
+
+uint8_t getGPUInterrupt()
+{
+	return GPU_interrupt;
 }

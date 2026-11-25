@@ -90,6 +90,7 @@ void draw_background()
     uint8_t colour = 0x00;
     int8_t scroll_offset_x = getValue(0x0800);
     int8_t scroll_offset_y = getValue(0x0801);
+    uint8_t scanline = 0x00;
     clock_t start_time = clock();
     clock_t end_time = clock();
 
@@ -103,13 +104,15 @@ void draw_background()
         tile_counter++; //increment the tile counter for the next pass
         int tile_count = (tile_counter - 0x0403) / 2; //+2 because the counter already incremented
 
-        if ((tile_count + 1) % 16 == 0 && tile_count != 0)
+        if ((tile_count) % 16 == 0 /* && tile_count != 0*/)
         {
+            setScanline(scanline);
             start_time = clock();
-            while (((float)end_time - (float)start_time) / CLOCKS_PER_SEC < 0.00006355)
+            while (((float)end_time - (float)start_time) / CLOCKS_PER_SEC < 0.00096450617) //time comes from (1/60)/(16 + (16 * 0.08)) 1/60 is 60 frames per second, 16 is the number of tiles vertically, and 16 * 0.08 is the vblanking period
             {
                 end_time = clock();
             }
+            scanline++;
         }
 
         scroll_offset_x = getValue(0x0800);
@@ -1097,10 +1100,10 @@ void GPUtick() {
             start_time = clock();
             get_cpu_stage = cpu_stage;//done this way to prevent crashes
 
-            if (cpu_stage != last_cpu_stage && getValue(0x0601) == 0x00)
+            if (cpu_stage != last_cpu_stage && getGPUInterrupt() == 0x00)
             {
                 last_cpu_stage = cpu_stage;
-                //printf("GPU!");
+                //printf("GPU!\n");
                 glClear(GL_COLOR_BUFFER_BIT);
                 //drawGrid();
                 draw_background();
